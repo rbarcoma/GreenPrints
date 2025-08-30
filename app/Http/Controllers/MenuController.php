@@ -64,12 +64,12 @@ class MenuController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'menus' => 'required|array',
+            'menus' => 'array|nullable',
         ]);
 
         MenuHeaderModel::create([
             'name' => strtoupper($validated['name']),
-            'menu_ids' => $validated['menus'], // auto JSON
+            'menu_ids' => $validated['menus'] ?? [], 
         ]);
         return redirect()->route('menu-header');
     }
