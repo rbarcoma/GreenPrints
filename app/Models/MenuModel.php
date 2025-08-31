@@ -16,6 +16,11 @@ class MenuModel extends Model
 
     public function headers()
     {
-        return $this->belongsToMany(MenuHeaderModel::class, 'header_menus', 'menus.id', 'header_menus.id');
+        return $this->belongsToMany(MenuHeaderModel::class, 'menu_headers', 'menus.id', 'menu_headers.id');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(RoleModel::class, 'role', 'menus.id', 'role.id');
     }
 }

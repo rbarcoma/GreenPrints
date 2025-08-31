@@ -29,6 +29,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::controller(MenuController::class)->middleware('auth')->group(function () {
     Route::get('/menu', 'index')->name('menu');
     route::post('/menu', 'createMenu')->name('createMenu');
+    route::put('/menu/{id}', 'updateMenu')->name('menu.update');
 
 
     // Menu Header part
@@ -50,5 +51,5 @@ Route::controller(RoleController::class)->middleware('auth')->group(function () 
 
     Route::get('/role', 'roleIndex')->name('menu.role');
     Route::post('/role', 'roleCreation')->name('menu.role-creation');
+    Route::put('/role/{id}', 'updateRole')->name('menu.role-update');
 });
-

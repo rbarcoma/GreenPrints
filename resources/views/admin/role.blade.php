@@ -106,6 +106,7 @@
                     <th>Name</th>
                     <th>Slug</th>
                     <th>Description</th>
+                    <th>menus</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -116,8 +117,81 @@
                     <td>{{ $role->name }}</td>
                     <td>{{ $role->slug }}</td>
                     <td>{{ $role->description }}</td>
-                    <td></td>
+                    <td>  
+                        @foreach ($role->menus as $menu) 
+                            <li>{{ $menu->name }}</li>
+                        @endforeach
+                    </td>
+                    
+                    <td>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $role->id }}">
+                         Edit
+                        </button>
+                    </td>
                 </tr>
+
+
+                {{-- EDIT MODAL --}}
+
+                 <div class="modal fade" id="exampleModal{{ $role->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog  modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Role: {{ $role->name }}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('menu.role-update',$role->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input name" required name="name" value="{{ $role->name }}">
+                        </div>
+
+                         <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Slug</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input slug" name="slug" value="{{ $role->slug }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Description</label>
+    
+                                <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="description"  >{{ $role->description }}</textarea>
+                          
+                        </div>
+
+
+                     <div class="mb-3">
+                                   @foreach ($menus as $menuItems)
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                        type="checkbox"
+                                        value="{{ $menuItems->id }}"
+                                        id="checkDefault{{ $role->id }}-{{ $menuItems->id }}"
+                                        name="menus[]"
+                                        @if(is_array($role->menu_ids) && in_array($menuItems->id, $role->menu_ids)) checked @endif>
+
+                                    <label class="form-check-label" for="checkDefault{{ $role->id }}-{{ $menuItems->id }}">
+                                        {{ $menuItems->name }}
+                                    </label>
+                                </div>
+                            @endforeach
+
+                           
+                    </div>
+
+                  
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+                  </form>
+                </div>
+            </div>
+        </div>
+                
                 @endforeach
                 
             </tbody>

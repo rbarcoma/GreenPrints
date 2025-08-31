@@ -11,9 +11,9 @@ class RoleController extends Controller
     public function roleIndex()
     {
 
-        $roles = RoleModel::all();
-
         $menus = MenuModel::all();
+
+        $roles = RoleModel::all();
 
         return view('admin.role', compact('roles', 'menus'));
     }
@@ -21,16 +21,44 @@ class RoleController extends Controller
 
     public function roleCreation(Request $request)
     {
+
         $validated = $request->validate([
-            'name'   => 'required|string|max:255',
-            'slug'   => 'nullable|string',
+            'name'        => 'required|string|max:255',
+            'slug'        => 'nullable|string',
             'description' => 'nullable|string',
+            'menus'       => 'array|nullable',
         ]);
+
+        // dd($validated['menus']);
 
         RoleModel::create([
             'name'         => $validated['name'],
             'slug'         => $validated['slug'],
             'description'  => $validated['description'],
+            'menu_ids'     => $validated['menus'] ?? [],
+        ]);
+
+        return redirect()->route('menu.role');
+    }
+
+
+    public function updateRole($id, Request $request)
+    {
+
+        $validated = $request->validate([
+            'name'        => 'required|string|max:255',
+            'slug'        => 'nullable|string',
+            'description' => 'nullable|string',
+            'menus'       => 'array|nullable',
+        ]);
+
+        $role = RoleModel::findOrFail($id);
+
+        $role->update([
+            'name'         => $validated['name'],
+            'slug'         => $validated['slug'],
+            'description'  => $validated['description'],
+            'menu_ids'     => $validated['menus'] ?? [],
         ]);
 
         return redirect()->route('menu.role');

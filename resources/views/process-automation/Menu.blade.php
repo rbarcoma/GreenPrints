@@ -122,8 +122,70 @@
                     <td>{{ $menus->icon }}</td>
                     <td>{{ $menus->parent_id }}</td>
                     <td>{{ $menus->route }}</td>
-                    <td></td>
+                    <td>
+
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $menus->id }}">
+                        Edit
+                    </button>
+                    </td>
                 </tr>
+
+
+                {{-- EDIT MODAL --}}
+        <div class="modal fade" id="exampleModal{{ $menus->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog  modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Menu: {{ $menus->name }}</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('menu.update',$menus->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input name" required name="name" value="{{ $menus->name }}">
+                        </div>
+
+                         <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Slug</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input slug" name="slug" value="{{ $menus->slug }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Icon</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input icon"  name="icon" value="{{ $menus->icon }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Parent</label>
+                         
+                            <select class="form-select form-select-sm mb-3" aria-label="Large select example" name="parent">
+                              
+                                <option selected value="">None</option>
+                                @foreach ($menu as $m )
+                                <option value="{{ $m->id }}">{{ $m->name }}</option>
+                                 @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Route</label>
+                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input route" name="route" value="{{ $menus->route }}">
+                        </div>
+                  
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+                  </form>
+                </div>
+            </div>
+        </div>
+
+
                 @endforeach
                 
             </tbody>

@@ -12,5 +12,14 @@ class RoleModel extends Model
 
     protected $table = 'role';
 
-    protected $fillable = ['name', 'slug', 'description'];
+    protected $fillable = ['name', 'slug', 'description', 'menu_ids'];
+
+    protected $casts = [
+        'menu_ids' => 'array',
+    ];
+
+    public function getMenusAttribute()
+    {
+        return MenuModel::whereIn('id', $this->menu_ids)->get();
+    }
 }

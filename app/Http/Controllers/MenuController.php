@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
+
+    // Menu PART start
     public function index()
     {
         $menus = MenuModel::all();
@@ -39,9 +41,35 @@ class MenuController extends Controller
         return redirect()->route('menu');
     }
 
+    public function updateMenu($id, Request $request)
+    {
+        $validated = $request->validate([
+            'name'   => 'required|string|max:255',
+            'slug'   => 'nullable|string',
+            'icon'   => 'nullable|string',
+            'parent' => 'nullable|integer',
+            'route'  => 'nullable|string'
+        ]);
 
 
-    // Menu Header part
+        $menu = MenuModel::findOrFail($id);
+
+        $menu->update([
+            'name'      => $validated['name'],
+            'slug'      => $validated['slug'],
+            'icon'      => $validated['icon'],
+            'parent_id' => $validated['parent'],
+            'route'     => $validated['route'],
+        ]);
+
+        return redirect()->route('menu');
+    }
+
+
+
+
+
+    // Menu Header part start
 
     public function menuHeaderIndex()
     {

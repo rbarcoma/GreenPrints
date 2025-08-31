@@ -19,7 +19,7 @@ class MenuHeaderModel extends Model
     ];
 
 
-     public function getMenusAttribute()
+    public function getMenusAttribute()
     {
         return MenuModel::whereIn('id', $this->menu_ids)->get();
     }
