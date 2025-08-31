@@ -74,6 +74,20 @@
                           
                         </div>
 
+
+                     <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-label">Menus</label>
+                            @foreach ($menus as $menu )
+                             <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="{{ $menu->id }}" id="checkDefault{{ $menu->id }}" name="menus[]">
+                                <label class="form-check-label" for="checkDefault">
+                                    {{ $menu->name }}
+                                </label>
+                            </div>
+                            @endforeach
+                           
+                    </div>
+
                   
                 </div>
                 <div class="modal-footer">

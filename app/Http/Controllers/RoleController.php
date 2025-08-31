@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MenuModel;
 use App\Models\RoleModel;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,9 @@ class RoleController extends Controller
 
         $roles = RoleModel::all();
 
-        return view('admin.role', compact('roles'));
+        $menus = MenuModel::all();
+
+        return view('admin.role', compact('roles', 'menus'));
     }
 
 
