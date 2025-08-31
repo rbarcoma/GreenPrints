@@ -9,6 +9,7 @@
 @section('content')
     <p>Welcome to this beautiful admin panel.</p>
 
+
     <section class="border p-3 card">
 
 

@@ -69,13 +69,25 @@ class MenuController extends Controller
 
         MenuHeaderModel::create([
             'name' => strtoupper($validated['name']),
-            'menu_ids' => $validated['menus'] ?? [], 
+            'menu_ids' => $validated['menus'] ?? [],
         ]);
         return redirect()->route('menu-header');
     }
 
     public function menuHeaderUpdate($id, Request $request)
     {
-        dd($request);
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'menus' => 'array|nullable',
+        ]);
+
+        $menuHeaders = MenuHeaderModel::findOrFail($id);
+
+        $menuHeaders->update([
+            'name' => strtoupper($validated['name']),
+            'menu_ids' => $validated['menus'] ?? [],
+        ]);
+
+        return redirect()->route('menu-header')->with('success', 'Menu Header updated successfully!');
     }
 }

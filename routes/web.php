@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,7 +26,7 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
-Route::controller(MenuController::class)->group(function () {
+Route::controller(MenuController::class)->middleware('auth')->group(function () {
     Route::get('/menu', 'index')->name('menu');
     route::post('/menu', 'createMenu')->name('createMenu');
 
@@ -34,3 +36,19 @@ Route::controller(MenuController::class)->group(function () {
     Route::post('/menu-header', 'menuHeaderCreate')->name('menu-header.create');
     Route::put('/menu-header/{id}', 'menuHeaderUpdate')->name('menu-header.update');
 });
+
+
+Route::controller(UserController::class)->middleware('auth')->group(function () {
+
+    Route::get('/user', 'userIndex')->name('menu.user');
+    Route::post('/user', 'userCreate')->name('menu.user-create');
+});
+
+
+
+Route::controller(RoleController::class)->middleware('auth')->group(function () {
+
+    Route::get('/role', 'roleIndex')->name('menu.role');
+    Route::post('/role', 'roleCreation')->name('menu.role-creation');
+});
+

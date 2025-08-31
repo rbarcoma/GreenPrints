@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Menu')
+@section('title', 'User')
 
 @section('content_header')
-    <h1>Menu</h1>
+    <h1>User</h1>
 @stop
 
 @section('content')
@@ -40,9 +40,9 @@
 
 
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">Menu List</h4>
+            <h4 class="mb-0">User List</h4>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Create Menu
+                Create User
             </button>
         </div>
 
@@ -74,13 +74,7 @@
 
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Parent</label>
-                         
-                            <select class="form-select form-select-sm mb-3" aria-label="Large select example" name="parent">
-                                <option selected value="">None</option>
-                                @foreach ($menu as $menus )
-                                <option value="{{ $menus->id }}">{{ $menus->name }}</option>
-                                 @endforeach
-                            </select>
+                       
                    
                             
                         </div>
@@ -106,22 +100,18 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Slug</th>
-                    <th>Icon</th>
-                    <th>Parent</th>
-                    <th>Route</th>
+                    <th>Email</th>
+                    <th>Role</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ( $menu as $menus)
+                @foreach ( $users as $user)
                 <tr>
-                    <td>{{ $menus->id }}</td>
-                    <td>{{ $menus->name }}</td>
-                    <td>{{ $menus->slug }}</td>
-                    <td>{{ $menus->icon }}</td>
-                    <td>{{ $menus->parent_id }}</td>
-                    <td>{{ $menus->route }}</td>
+                    <td>{{ $user->id }}</td>
+                    <td>{{ $user->name }}</td>
+                    <td>{{ $user->email }}</td>
+                    <td>Role</td>
                     <td></td>
                 </tr>
                 @endforeach

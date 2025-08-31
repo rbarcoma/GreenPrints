@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Menu')
+@section('title', 'Role')
 
 @section('content_header')
-    <h1>Menu</h1>
+    <h1>Role</h1>
 @stop
 
 @section('content')
@@ -40,9 +40,9 @@
 
 
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">Menu List</h4>
+            <h4 class="mb-0">Role List</h4>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Create Menu
+                Create Role
             </button>
         </div>
 
@@ -55,7 +55,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('createMenu') }}" method="POST">
+                    <form action="{{ route('menu.role-creation') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Name</label>
@@ -68,28 +68,12 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Icon</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input icon"  name="icon">
+                            <label for="formGroupExampleInput" class="form-label">Description</label>
+    
+                                <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="description"></textarea>
+                          
                         </div>
 
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Parent</label>
-                         
-                            <select class="form-select form-select-sm mb-3" aria-label="Large select example" name="parent">
-                                <option selected value="">None</option>
-                                @foreach ($menu as $menus )
-                                <option value="{{ $menus->id }}">{{ $menus->name }}</option>
-                                 @endforeach
-                            </select>
-                   
-                            
-                        </div>
-
-                    
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Route</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input route" name="route">
-                        </div>
                   
                 </div>
                 <div class="modal-footer">
@@ -107,21 +91,17 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Slug</th>
-                    <th>Icon</th>
-                    <th>Parent</th>
-                    <th>Route</th>
+                    <th>Description</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ( $menu as $menus)
+                @foreach ( $roles as $role)
                 <tr>
-                    <td>{{ $menus->id }}</td>
-                    <td>{{ $menus->name }}</td>
-                    <td>{{ $menus->slug }}</td>
-                    <td>{{ $menus->icon }}</td>
-                    <td>{{ $menus->parent_id }}</td>
-                    <td>{{ $menus->route }}</td>
+                    <td>{{ $role->id }}</td>
+                    <td>{{ $role->name }}</td>
+                    <td>{{ $role->slug }}</td>
+                    <td>{{ $role->description }}</td>
                     <td></td>
                 </tr>
                 @endforeach
