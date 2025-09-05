@@ -59,12 +59,12 @@
                         @csrf
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input name" required name="name">
+                            <input type="text" class="form-control" id="menuName" placeholder="Please input name" required name="name">
                         </div>
 
                          <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Slug</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input slug" name="slug">
+                            <input type="text" class="form-control" id="menuSlug" placeholder="Please input slug" name="slug">
                         </div>
 
                         <div class="mb-3">
@@ -195,18 +195,6 @@
     
 @stop
 
-{{-- @section('footer')
-    <div class="float-right">
-        Version: {{ config('app.version', '1.0.0') }}
-    </div>
-
-    <strong>
-        <a href="{{ config('app.company_url', '#') }}">
-            {{ config('app.company_name', 'My company') }}
-        </a>
-    </strong>
-@stop --}}
-
 
 @section('css')
  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -214,6 +202,33 @@
 @stop
 
 @section('js')
+
+    {{-- name & slug auto --}}
+   <script>
+        const menuName = document.getElementById('menuName');
+        const menuSlug = document.getElementById('menuSlug');
+        menuName.addEventListener('keyup', function() {
+                let slug = menuName.value
+                    .toLowerCase()              
+                    .trim()                     
+                    .replace(/[^a-z0-9\s-]/g, '') 
+                    .replace(/\s+/g, '-')      
+                    .replace(/-+/g, '-');       
+
+                menuSlug.value = slug;
+         });
+
+   </script>
+
+
+
+
+
+
+
+
+
+
     <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/dataTables.bootstrap5.min.js') }}"></script>
@@ -228,5 +243,4 @@
         });
     </script>
 
-    <script>console.log("✅ DataTables is now working with AdminLTE!");</script>
 @stop

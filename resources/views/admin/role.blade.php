@@ -118,9 +118,11 @@
                     <td>{{ $role->slug }}</td>
                     <td>{{ $role->description }}</td>
                     <td>  
+                        <ul>
                         @foreach ($role->menus as $menu) 
-                            <li>{{ $menu->name }}</li>
+                                <li>{{ $menu->name }}</li>
                         @endforeach
+                        </ul>
                     </td>
                     
                     <td>

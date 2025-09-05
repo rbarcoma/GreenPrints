@@ -74,9 +74,11 @@
                     <td>{{ $headers->id }}</td>
                     <td>{{ $headers->name }}</td>
                     <td>  
+                        <ul>
                         @foreach ($headers->menus as $menu) 
                             <li>{{ $menu->name }}</li>
                         @endforeach
+                        </ul>
                     </td>
                     <td>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $headers->id }}">
