@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -53,3 +54,11 @@ Route::controller(RoleController::class)->middleware('auth')->group(function () 
     Route::post('/role', 'roleCreation')->name('menu.role-creation');
     Route::put('/role/{id}', 'updateRole')->name('menu.role-update');
 });
+
+
+Route::controller(ItemController::class)->middleware('auth')->group(function () {
+    Route::get('/item', 'ItemIndex')->name('menu.item');
+});
+
+
+

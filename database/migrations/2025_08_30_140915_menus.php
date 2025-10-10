@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->integer('parent_id')->nullable();
-            $table->string('route');
+            $table->string('route')->nullable();
             $table->timestamps();
         });
     }

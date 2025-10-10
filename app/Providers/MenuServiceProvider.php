@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
-class MenuServiceProvider extends ServiceProvider   
+class MenuServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
