@@ -117,7 +117,7 @@
                     <td>{{ $menus->name }}</td>
                     <td>{{ $menus->slug }}</td>
                     <td>{{ $menus->icon }}</td>
-                    <td>{{ $menus->parent_id }}</td>
+                    <td>{{ $menus->parent ? $menus->parent->name : '' }}</td>
                     <td>{{ $menus->route }}</td>
                     <td>
 
