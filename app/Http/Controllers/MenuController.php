@@ -27,7 +27,7 @@ class MenuController extends Controller
             'slug'   => 'nullable|string',
             'icon'   => 'nullable|string',
             'parent' => 'nullable|integer',
-            'route'  => 'nullable|string'
+
         ]);
 
         MenuModel::create([
@@ -35,7 +35,7 @@ class MenuController extends Controller
             'slug'      => $validated['slug'],
             'icon'      => $validated['icon'],
             'parent_id' => $validated['parent'],
-            'route'     => $validated['route'],
+            'route'     => $request->route,
         ]);
 
         return redirect()->route('menu');
@@ -43,7 +43,7 @@ class MenuController extends Controller
 
     public function updateMenu($id, Request $request)
     {
-        $validated = $request->validate([
+        $validated = $request->alidate([
             'name'   => 'required|string|max:255',
             'slug'   => 'nullable|string',
             'icon'   => 'nullable|string',
@@ -79,7 +79,7 @@ class MenuController extends Controller
 
         foreach ($menuHeaders as $header) {
             $header->menu_list = MenuModel::whereIn('id', $header->menu_ids)->get();
-        }
+        }   
 
         $menuItem  = MenuModel::all();
 

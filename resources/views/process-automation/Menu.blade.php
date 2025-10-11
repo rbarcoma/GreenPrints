@@ -74,23 +74,20 @@
 
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Parent</label>
-                         
                             <select class="form-select form-select-sm mb-3" aria-label="Large select example" name="parent">
                                 <option selected value="">None</option>
                                 @foreach ($menu as $menus )
                                 <option value="{{ $menus->id }}">{{ $menus->name }}</option>
                                  @endforeach
                             </select>
-                   
-                            
                         </div>
 
-                    
+
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Route</label>
                             <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input route" name="route">
                         </div>
-                  
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -160,9 +157,9 @@
 
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Parent</label>
-                         
+
                             <select class="form-select form-select-sm mb-3" aria-label="Large select example" name="parent">
-                              
+
                                 <option selected value="">None</option>
                                 @foreach ($menu as $m )
                                 <option value="{{ $m->id }}">{{ $m->name }}</option>
@@ -174,7 +171,7 @@
                             <label for="formGroupExampleInput" class="form-label">Route</label>
                             <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input route" name="route" value="{{ $menus->route }}">
                         </div>
-                  
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -187,12 +184,12 @@
 
 
                 @endforeach
-                
+
             </tbody>
-     
+
         </table>
     </section>
-    
+
 @stop
 
 
@@ -209,11 +206,11 @@
         const menuSlug = document.getElementById('menuSlug');
         menuName.addEventListener('keyup', function() {
                 let slug = menuName.value
-                    .toLowerCase()              
-                    .trim()                     
-                    .replace(/[^a-z0-9\s-]/g, '') 
-                    .replace(/\s+/g, '-')      
-                    .replace(/-+/g, '-');       
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-');
 
                 menuSlug.value = slug;
          });
