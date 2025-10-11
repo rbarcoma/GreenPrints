@@ -109,7 +109,7 @@
 $(function () {
     $('#itemCategoryTable').DataTable({
         responsive: true,
-        autoWidth: false,
+        autoWidth: true,
         pageLength: 10,
         language: {
             search: "Search:",

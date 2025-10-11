@@ -36,7 +36,7 @@ class MenuServiceProvider extends ServiceProvider
                 $item = [
                     'text' => $m->name,
                     'url'  => $m->route ?: '#',
-                    'icon' => $m->icon ?: 'far fa-circle',
+                    'icon' => $m->icon ?: '',
                 ];
 
                 $subChildren = $build($m->id);
@@ -76,7 +76,7 @@ class MenuServiceProvider extends ServiceProvider
                     $item = [
                         'text' => $m->name,
                         'url'  => $m->route ?: '#',
-                        'icon' => $m->icon ?: 'far fa-circle',
+                        'icon' => $m->icon ?: '',
                     ];
 
                     $children = $build($m->id);
@@ -100,7 +100,7 @@ class MenuServiceProvider extends ServiceProvider
             $item = [
                 'text' => $m->name,
                 'url'  => $m->route ?: '#',
-                'icon' => $m->icon ?: 'far fa-circle',
+                'icon' => $m->icon ?: '',
             ];
 
             $children = $build($m->id);
