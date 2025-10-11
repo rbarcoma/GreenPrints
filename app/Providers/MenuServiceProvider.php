@@ -3,13 +3,12 @@
 namespace App\Providers;
 
 use App\Models\MenuHeaderModel;
-use App\Models\MenuHeader;
 use App\Models\MenuModel;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
-class MenuServiceProvider extends ServiceProvider   
+class MenuServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
@@ -17,8 +16,8 @@ class MenuServiceProvider extends ServiceProvider
             return;
         }
 
+        // --- Load all menus in sorted order ---
         $query = MenuModel::query();
-
         if (Schema::hasColumn('menus', 'sort')) {
             $query->orderBy('parent_id')->orderBy('sort')->orderBy('id');
         } else {
@@ -27,8 +26,9 @@ class MenuServiceProvider extends ServiceProvider
 
         $allMenus = $query->get();
 
-        // --- build recursive for submenus ---
+        // --- Group menus by parent_id for recursive building ---
         $grouped = $allMenus->groupBy('parent_id');
+
         $build = function ($parentId) use (&$build, $grouped) {
             $children = $grouped->get($parentId, collect());
 
@@ -39,30 +39,39 @@ class MenuServiceProvider extends ServiceProvider
                     'icon' => $m->icon ?: 'far fa-circle',
                 ];
 
-                $children = $build($m->id);
-                if ($children->isNotEmpty()) {
-                    $item['submenu'] = $children->toArray();
+                $subChildren = $build($m->id);
+                if ($subChildren->isNotEmpty()) {
+                    $item['submenu'] = $subChildren->toArray();
                 }
 
                 return $item;
             });
         };
 
-        // --- collect menus that are already inside headers ---
-        $usedMenuIds = [];
+        // --- Function to collect all descendant menu IDs recursively ---
+        $collectIds = function ($menu, $grouped) use (&$collectIds) {
+            $ids = [$menu->id];
+            $children = $grouped->get($menu->id, collect());
+            foreach ($children as $child) {
+                $ids = array_merge($ids, $collectIds($child, $grouped));
+            }
+            return $ids;
+        };
 
+        $usedMenuIds = [];
         $dbMenu = [];
+
+        // --- Process all Menu Headers and their assigned menus ---
         if (Schema::hasTable('menu_headers')) {
             $menuHeaders = MenuHeaderModel::all();
 
             foreach ($menuHeaders as $header) {
-                // Add header label
                 $dbMenu[] = ['header' => $header->name];
 
-                // Add menus under this header
-                $menus = MenuModel::whereIn('id', $header->menu_ids)->get();
+                $menus = MenuModel::whereIn('id', $header->menu_ids ?? [])->get();
                 foreach ($menus as $m) {
-                    $usedMenuIds[] = $m->id;
+                    // mark menu and all its descendants as "used"
+                    $usedMenuIds = array_merge($usedMenuIds, $collectIds($m, $grouped));
 
                     $item = [
                         'text' => $m->name,
@@ -80,9 +89,14 @@ class MenuServiceProvider extends ServiceProvider
             }
         }
 
-        // --- add menus NOT inside any header (orphans) ---
+        // --- Add orphan menus (not under any header) ---
         $orphanMenus = $allMenus->whereNotIn('id', $usedMenuIds);
         foreach ($orphanMenus as $m) {
+            // Skip child menus whose parent is already an orphan (avoid double nesting)
+            if ($m->parent_id && $allMenus->contains('id', $m->parent_id)) {
+                continue;
+            }
+
             $item = [
                 'text' => $m->name,
                 'url'  => $m->route ?: '#',
@@ -97,7 +111,7 @@ class MenuServiceProvider extends ServiceProvider
             $dbMenu[] = $item;
         }
 
-        // merge with existing config menu
+        // --- Merge with AdminLTE static menu configuration ---
         $static = Config::get('adminlte.menu', []);
         Config::set('adminlte.menu', array_merge($static, $dbMenu));
     }

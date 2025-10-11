@@ -300,23 +300,22 @@ return [
 
     'menu' => [
 
-           [
-                'type' => 'navbar-search',
-                'text' => 'search',
-                'topnav_right' => true,
-            ],
-            [
-                'type' => 'fullscreen-widget',
-                'topnav_right' => true,
-            ],
+        [
+            'type' => 'navbar-search',
+            'text' => 'search',
+            'topnav_right' => true,
+        ],
+        [
+            'type' => 'fullscreen-widget',
+            'topnav_right' => true,
+        ],
 
-            // Sidebar search:
-            [
-                'type' => 'sidebar-menu-search',
-                'text' => 'search',
-            ]
-            ,
-            // ['header' => 'account_settings'],
+        // Sidebar search:
+        [
+            'type' => 'sidebar-menu-search',
+            'text' => 'search',
+        ],
+        // ['header' => 'account_settings'],
         // Navbar items:
         // [
         //     'type' => 'navbar-search',
@@ -340,7 +339,7 @@ return [
         //     'text' => 'Menu',
         //     'url' => '/menu',
         //     'icon' => 'far fa-fw fa-file',
-            
+
         //     // 'label' => 4,
         //     // 'label_color' => 'success',
         // ],
@@ -460,7 +459,7 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
