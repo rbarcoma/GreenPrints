@@ -34,7 +34,12 @@
                             <label>Item Category Title</label>
                             <input type="text" class="form-control" placeholder="Please input category title" required name="name">
                         </div>
+                        <div class="mb-3">
+                            <label for="formGroupExampleInput" class="form-group">Item Description</label>
+                            <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="item_desc"></textarea>
+                        </div>
                     </div>
+
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -52,6 +57,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Category Name</th>
+                    <th>Description</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -60,6 +66,7 @@
                     <tr>
                         <td>{{ $category->id }}</td>
                         <td>{{ $category->category_name }}</td>
+                        <td>{{ $category->category_desc}}</td>
                         <td>
                             <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editModal{{ $category->id }}">Edit</button>
                         </td>
@@ -77,7 +84,7 @@
                                     </button>
                                 </div>
 
-                                <form action="" method="POST">
+                                <form action="{{ route('item_category.update', $category->id) }}" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="modal-body">
@@ -86,8 +93,11 @@
                                             <input type="text" name="name" class="form-control"
                                                    value="{{ $category->category_name }}" required>
                                         </div>
+                                         <div class="mb-3">
+                                            <label for="formGroupExampleInput" class="form-label">Description</label>
+                                            <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="item_desc"  >{{ $category->category_desc }}</textarea>
+                                        </div>
                                     </div>
-
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                         <button type="submit" class="btn btn-primary">Update</button>

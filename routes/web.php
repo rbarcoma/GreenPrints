@@ -65,4 +65,5 @@ Route::controller(ItemController::class)->middleware('auth')->group(function () 
 Route::controller(ItemCategoryController::class)->middleware('auth')->group(function () {
     Route::get('/item_category', 'index')->name('item_category.index');
     Route::post('/item_category', 'create_category')->name('item_category.create');
+    Route::put('/item_category/{id}', 'update_category')->name('item_category.update');
 });

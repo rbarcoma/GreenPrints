@@ -40,15 +40,8 @@
 
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Item Description</label>
-    
                                 <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="item_desc"></textarea>
-                          
                         </div>
-
-
-                      
-
-                  
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -71,18 +64,18 @@
                 </tr>
             </thead>
             <tbody>
-                
+
                 <tr>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>  
+                    <td>
                         <ul>
-                       
+
                         </ul>
                     </td>
-                    
+
                     <td>
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                          Edit
@@ -116,18 +109,18 @@
 
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Description</label>
-    
+
                                 <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="description"  ></textarea>
-                          
+
                         </div>
 
 
                      <div class="mb-3">
-                     
-                           
+
+
                     </div>
 
-                  
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -137,10 +130,10 @@
                 </div>
             </div>
         </div>
-                
+
 
             </tbody>
-     
+
         </table>
     </section>
 @stop

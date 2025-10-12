@@ -27,7 +27,7 @@ class MenuController extends Controller
             'slug'   => 'nullable|string',
             'icon'   => 'nullable|string',
             'parent' => 'nullable|integer',
-            'route'  => 'nullable|string'
+
         ]);
 
         MenuModel::create([
@@ -35,7 +35,7 @@ class MenuController extends Controller
             'slug'      => $validated['slug'],
             'icon'      => $validated['icon'],
             'parent_id' => $validated['parent'],
-            'route'     => $validated['route'],
+            'route'     => $request->route,
         ]);
 
         return redirect()->route('menu');
