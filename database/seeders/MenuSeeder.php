@@ -16,11 +16,11 @@ class MenuSeeder extends Seeder
        $menus = [
             [
                 'id' => 1,
-                'icon' => 'fas fa-user',
-                'name' => 'Role',
-                'slug' => 'role',
+                'icon' => 'fas fa-gauge',
+                'name' => 'Dashboard',
+                'slug' => 'dashboard',
                 'parent_id' => null,
-                'route' => '/role',
+                'route' => '/home',
             ],
             [
                 'id' => 2,
@@ -80,11 +80,11 @@ class MenuSeeder extends Seeder
             ],
             [
                 'id' => 9,
-                'icon' => 'fas fa-gauge',
-                'name' => 'Dashboard',
-                'slug' => 'dashboard',
+                'icon' => 'fas fa-user',
+                'name' => 'Role',
+                'slug' => 'role',
                 'parent_id' => null,
-                'route' => '/home',
+                'route' => '/role',
             ],
             [
                 'id' => 10,
