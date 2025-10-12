@@ -43,7 +43,7 @@ class MenuController extends Controller
 
     public function updateMenu($id, Request $request)
     {
-        $validated = $request->alidate([
+        $validated = $request->validate([
             'name'   => 'required|string|max:255',
             'slug'   => 'nullable|string',
             'icon'   => 'nullable|string',
@@ -79,7 +79,7 @@ class MenuController extends Controller
 
         foreach ($menuHeaders as $header) {
             $header->menu_list = MenuModel::whereIn('id', $header->menu_ids)->get();
-        }   
+        }
 
         $menuItem  = MenuModel::all();
 

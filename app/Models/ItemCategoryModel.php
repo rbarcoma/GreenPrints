@@ -11,5 +11,6 @@ class ItemCategoryModel extends Model
 
     protected $table = 'item_category';
 
-    protected $fillable = ['category_name'];
+    protected $fillable = ['category_name', 'category_desc'];
+
 }
