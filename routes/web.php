@@ -59,8 +59,13 @@ Route::controller(RoleController::class)->middleware('auth')->group(function () 
 
 
 Route::controller(ItemController::class)->middleware('auth')->group(function () {
-    Route::get('/item', 'index')->name('item.index');
+    Route::get('/items', 'index')->name('item.index');
+    Route::post('/items', 'createItem')->name('item.create');
+   
 });
+
+
+
 
 Route::controller(ItemCategoryController::class)->middleware('auth')->group(function () {
     Route::get('/item_category', 'index')->name('item_category.index');

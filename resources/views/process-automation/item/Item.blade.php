@@ -1,162 +1,234 @@
 @extends('adminlte::page')
 
-@section('title', 'Item')
+@section('title', 'Item Category')
 
 @section('content_header')
-    <h1>Item</h1>
+    <h1>Item Category</h1>
 @stop
 
 @section('content')
- <section class="border p-3 card">
+<section class="border p-3 card">
 
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Item List</h4>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModal">
+            Create Category
+        </button>
+    </div>
 
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">Item List</h4>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-                Create Item
-            </button>
-        </div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog  modal-lg modal-dialog-centered">
-                <div class="modal-content">
+    <!-- Create Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Menu creation</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="createModalLabel">Item Category Creation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span>&times;</span>
+                    </button>
                 </div>
-                <div class="modal-body">
-                    <form action="{{ route('menu.role-creation') }}" method="POST">
-                        @csrf
+
+                <form action="{{ route('item.create') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Item Category Title</label>
+                            <input type="text" class="form-control" placeholder="Please input category title" required name="name">
+                        </div>
+                        
                         <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Item Name</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input name" required name="name">
+                            <label for="formGroupExampleInput" class="form-group">Item Description</label>
+                            <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="description"></textarea>
                         </div>
 
-                         <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Slug</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input slug" name="slug">
+                        <div class="mb-3">
+                                <label for="formGroupExampleInput" class="form-group">Item Category</label>
+                              <select class="custom-select" id="inputGroupSelect01" name="category">
+                                @foreach ($category as $item)
+                                    <option value="{{ $item->id }}">{{ $item->category_name }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Item Description</label>
-                                <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="item_desc"></textarea>
+                          <div class="form-group">
+                            <label>Item price</label>
+                            <input type="number" class="form-control" placeholder="Please item price" required name="price" min="0" value="0" step="0.01>
                         </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-                  </form>
-                </div>
+
+                      <div class="mb-3">
+                            <label for="image" class="form-label">Upload item image</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="image" accept="image/*"  name="image"  onchange="previewImage(event)">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                            </div>
+                      </div>
+
+                        <div>
+                            <button id="removeBtn" type="button" class="btn btn-sm btn-danger d-none" onclick="removeImage()">Remove Image</button>
+                        </div>
+
+                      <div class="mb-3 text-center">
+                        <img id="preview" 
+                            src="{{ asset('default_image/default_image.jpg') }}" 
+                            alt="Preview Image" 
+                            class="img-thumbnail mb-3" 
+                            style="max-width: 200px;">
+                        </div>
+                    
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
 
-        <table id="example" class="table   table-bordered">
-            <thead>
+    <!-- Table -->
+    <div class="table-responsive">
+        <table id="itemCategoryTable" class="table table-bordered table-striped">
+            <thead class="thead-light">
                 <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Slug</th>
-                    <th>Description</th>
-                    <th>menus</th>
+                    <th>Item Name</th>
+                    {{-- <th>Description</th> --}}
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Barcode</th>
+                    <th>Image</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
+                @foreach ($item_collection as $collection)
+                    <tr>
+                        <td>{{ $collection->id }}</td>
+                        <td>{{ $collection->item_name }}</td>
+                        {{-- <td>{{ $collection->item_desc }}</td> --}}
+                        <td>{{ $collection->category->category_name }}</td>
+                        <td>{{ number_format($collection->item_price, 2) }}</td>
+                        <td>
+                            {!! DNS1D::getBarcodeHTML($collection->barcode->barcode_value, 'PHARMA') !!}
+                            Barcode: {{ $collection->barcode->barcode_value }}
+                        </td>
+                        <td>
+                            <img src="{{ asset('Item/images/' . $collection->image->image_name) }}" width="80" alt="Item Image"> <br>
+                            {{ $collection->image->image_name }}
 
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <ul>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#viewModal{{ $collection->id }}">view</button>
+                        </td>
+                    </tr>
 
-                        </ul>
-                    </td>
+                    <!-- View Modal -->
+                    <div class="modal fade" id="viewModal{{ $collection->id }}" tabindex="-1" role="dialog"
+                         aria-labelledby="viewModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">View item : {{ $collection->item_name }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span>&times;</span>
+                                    </button>
+                                </div>
 
-                    <td>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                         Edit
-                        </button>
-                    </td>
-                </tr>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+ <img src="{{ asset('Item/images/' . $collection->image->image_name) }}" width="80" alt="Item Image"> <br>
+                            {{ $collection->image->image_name }}
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Barcode</label>
+                                            <span>{!! DNS1D::getBarcodeHTML($collection->barcode->barcode_value, 'PHARMA') !!}</span>
+                                            <span>Barcode: {{ $collection->barcode->barcode_value }}</span>
+                                        </div>
+
+                                    
+                                        <div class="form-group">
+                                            <label>Item Name</label>
+                                            <input type="text" name="name" class="form-control"
+                                                value="{{ $collection->item_name }}" disabled>
+                                        </div>
+                                         <div class="mb-3">
+                                            <label for="formGroupExampleInput" class="form-label">Description</label>
+                                            <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="item_desc"  disabled rows="6">{{ $collection->item_desc }}</textarea>
+                                        </div>
+
+                                          <div class="form-group">
+                                            <label>Category Name</label>
+                                            <input type="text" name="name" class="form-control"
+                                                value="{{ $collection->category->category_name }}" disabled>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Price</label>
+                                            <input type="text" name="name" class="form-control"
+                                                value="{{ number_format($collection->item_price, 2) }}" disabled>
+                                        </div>
+
+                                     
 
 
-                {{-- EDIT MODAL --}}
 
-                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog  modal-lg modal-dialog-centered">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Role: </h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input name" required name="name" value="">
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                      
+                                    </div>
+                         
+                            </div>
                         </div>
-
-                         <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Slug</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input slug" name="slug" value="">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Description</label>
-
-                                <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="description"  ></textarea>
-
-                        </div>
-
-
-                     <div class="mb-3">
-
-
                     </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-                  </form>
-                </div>
-            </div>
-        </div>
-
-
+               @endforeach
             </tbody>
-
         </table>
-    </section>
-@stop
+    </div>
 
-@section('css')
- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap5.min.css') }}">
+</section>
 @stop
 
 @section('js')
-    <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('js/dataTables.bootstrap5.min.js') }}"></script>
+<script>
+  const defaultImage = "{{ asset('default_image/default_image.jpg') }}";
+  const imageInput = document.getElementById('image');
+  const preview = document.getElementById('preview');
+  const removeBtn = document.getElementById('removeBtn');
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+  function previewImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
 
-    {{-- Initialize DataTable --}}
-    <script>
-        $(document).ready(function() {
-            $('#example').DataTable();
-        });
-    </script>
+    const reader = new FileReader();
+    reader.onload = function() {
+      preview.src = reader.result;
+      removeBtn.classList.remove('d-none'); // show button
+    };
+    reader.readAsDataURL(file);
+  }
 
-    <script>console.log("✅ DataTables is now working with AdminLTE!");</script>
+  function removeImage() {
+    preview.src = defaultImage;  // reset to default
+    imageInput.value = '';       // clear file input
+    removeBtn.classList.add('d-none'); // hide button
+  }
+</script>
+
+<script>
+$(function () {
+    $('#itemCategoryTable').DataTable({
+        responsive: true,
+        autoWidth: true,
+        pageLength: 10,
+        language: {
+            search: "Search:",
+            lengthMenu: "Show _MENU_ entries",
+        }
+    });
+});
+</script>
 @stop
