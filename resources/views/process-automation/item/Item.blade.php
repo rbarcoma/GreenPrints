@@ -12,7 +12,7 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0">Item List</h4>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModal">
-            Create Category
+            Create Item
         </button>
     </div>
 

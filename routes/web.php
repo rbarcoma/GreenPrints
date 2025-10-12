@@ -6,6 +6,7 @@ use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Redirect;
 /*
@@ -71,4 +72,10 @@ Route::controller(ItemCategoryController::class)->middleware('auth')->group(func
     Route::get('/item_category', 'index')->name('item_category.index');
     Route::post('/item_category', 'create_category')->name('item_category.create');
     Route::put('/item_category/{id}', 'update_category')->name('item_category.update');
+});
+
+
+Route::controller(StockController::class)->middleware('auth')->group(function(){
+    Route::get('/stock', 'index')->name('stock.index');
+    Route::post('/stock','StockIn')->name('stock.stockIn');
 });
