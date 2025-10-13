@@ -11,7 +11,7 @@ class ItemModel extends Model
 
     protected $table = 'item';
 
-    protected $fillable = ['item_name', 'item_desc', 'item_category', 'item_price'];
+    protected $fillable = ['item_name', 'item_desc', 'item_category', 'item_price', 'status'];
 
     public function category()
     {

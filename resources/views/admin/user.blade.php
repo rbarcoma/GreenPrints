@@ -3,7 +3,7 @@
 @section('title', 'User')
 
 @section('content_header')
-    <h1>User</h1>
+    <h1>Admin User</h1>
 @stop
 
 @section('content')
@@ -40,7 +40,7 @@
 
 
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">User List</h4>
+            <h4 class="mb-0">Admin User List</h4>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Create User
             </button>
@@ -74,17 +74,17 @@
 
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Parent</label>
-                       
-                   
-                            
+
+
+
                         </div>
 
-                    
+
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Route</label>
                             <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input route" name="route">
                         </div>
-                  
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -115,12 +115,12 @@
                     <td></td>
                 </tr>
                 @endforeach
-                
+
             </tbody>
-     
+
         </table>
     </section>
-    
+
 @stop
 
 {{-- @section('footer')

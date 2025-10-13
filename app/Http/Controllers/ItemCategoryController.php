@@ -18,12 +18,10 @@ class ItemCategoryController extends Controller
 
     public function create_category(Request $request)
     {
-
-            // dd($request);
-
+        // dd($request);
         $validated = $request->validate([
-            'name' => 'required',
-            'item_desc' => 'nullable|string',
+            'name' => 'required|max:100',
+            'item_desc' => 'nullable|string|max:255',
         ]);
 
         $item = ItemCategoryModel::firstOrCreate([
@@ -37,10 +35,9 @@ class ItemCategoryController extends Controller
     public function update_category(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required',
-            'item_desc' => 'nullable|string',
+            'name' => 'required|max:100',
+            'item_desc' => 'nullable|string|max:255',
         ]);
-
 
         $itemCategory = ItemCategoryModel::findOrFail($id);
 
@@ -50,6 +47,14 @@ class ItemCategoryController extends Controller
 
         return redirect()->route('item_category.index');
 
+    }
+
+    public function destroy($id)
+    {
+        $itemCategory = ItemCategoryModel::findOrFail($id);
+        $itemCategory->delete();
+
+        return redirect()->route('item_category.index');
     }
 
 }

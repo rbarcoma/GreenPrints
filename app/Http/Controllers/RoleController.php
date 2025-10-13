@@ -63,4 +63,13 @@ class RoleController extends Controller
 
         return redirect()->route('menu.role');
     }
+
+    public function destroy($id)
+    {
+        $itemCategory = RoleModel::findOrFail($id);
+        $itemCategory->delete();
+
+        return redirect()->route('menu.role');
+    }
+
 }

@@ -69,9 +69,9 @@
 
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Description</label>
-    
+
                                 <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="description"></textarea>
-                          
+
                         </div>
 
 
@@ -85,10 +85,10 @@
                                 </label>
                             </div>
                             @endforeach
-                           
+
                     </div>
 
-                  
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -117,22 +117,25 @@
                     <td>{{ $role->name }}</td>
                     <td>{{ $role->slug }}</td>
                     <td>{{ $role->description }}</td>
-                    <td>  
+                    <td>
                         <ul>
-                        @foreach ($role->menus as $menu) 
+                        @foreach ($role->menus as $menu)
                                 <li>{{ $menu->name }}</li>
                         @endforeach
                         </ul>
                     </td>
-                    
+
                     <td>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $role->id }}">
-                         Edit
-                        </button>
+                        <div class="d-flex">
+                            <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $role->id }}">Edit</button>
+                            <form action="{{ route('menu.role.destroy', $role->id) }}" method="POST" onsubmit="return confirm('Are you sure to delete this category?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-primary btn-danger">Delete</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
-
-
                 {{-- EDIT MODAL --}}
 
                  <div class="modal fade" id="exampleModal{{ $role->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -158,9 +161,9 @@
 
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Description</label>
-    
+
                                 <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="description"  >{{ $role->description }}</textarea>
-                          
+
                         </div>
 
 
@@ -180,10 +183,10 @@
                                 </div>
                             @endforeach
 
-                           
+
                     </div>
 
-                  
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -193,14 +196,14 @@
                 </div>
             </div>
         </div>
-                
+
                 @endforeach
-                
+
             </tbody>
-     
+
         </table>
     </section>
-    
+
 @stop
 
 {{-- @section('footer')

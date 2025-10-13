@@ -6,6 +6,7 @@ use App\Models\ItemBarcode;
 use App\Models\ItemCategoryModel;
 use App\Models\ItemImage;
 use App\Models\ItemModel;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 
 
@@ -17,14 +18,12 @@ class ItemController extends Controller
         $category = ItemCategoryModel::all();
         $item_collection = ItemModel::all();
 
-        
        return view('process-automation.item.Item', compact('category','item_collection'));
     }
 
 
     public function createItem(Request $request)
     {
-
         // dd($request);
         $validated = $request->validate([
             'name' => 'required|string',
@@ -32,13 +31,15 @@ class ItemController extends Controller
             'category' => 'required',
             'price' => 'required|numeric',
             'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'status' => 'required|in:active,inactive',
         ]);
 
         $item = ItemModel::firstOrCreate([
             'item_name' => $validated['name'],
             'item_desc' => $validated['description'],
             'item_category' => $validated['category'],
-            'item_price' => $validated['price']
+            'item_price' => $validated['price'],
+            'status' => $validated['status'],
         ]);
 
         if ($request->hasFile('image')) {
@@ -64,8 +65,11 @@ class ItemController extends Controller
             'barcode_value' => $barcodeValue
         ]);
 
-       
-
+        // dd($validated);
         return redirect()->route('item.index');
     }
+
+
+
+
 }

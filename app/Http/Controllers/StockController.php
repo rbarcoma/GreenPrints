@@ -11,10 +11,9 @@ class StockController extends Controller
 {
    public function index()
    {
-        $items = ItemModel::all();
-
+        $items = ItemModel::where('status', 'active')->get();
         $stocks = StockModel::with('item')->get();
-        
+
         $inventory = $stocks->groupBy('item_id')->map(function ($group) {
         $total = 0;
         foreach ($group as $stock) {
@@ -36,8 +35,8 @@ class StockController extends Controller
         return view('process-automation.stocks.index', compact('items','inventory','stockIn','stockOut'));
    }
 
-   public function StockIn(Request $request)
-   {    
+    public function StockIn(Request $request)
+    {
         $user = Auth::user();
         $user->id;
 
@@ -47,6 +46,12 @@ class StockController extends Controller
             'remarks' => 'nullable'
         ]);
 
+
+        $item = ItemModel::find($validated['item']);
+        if (!$item || $item->status !== 'active') {
+            return back()->with('error', 'Cannot add stock for inactive item.');
+        }
+
         StockModel::create([
             'item_id' => $validated['item'],
             'type' => $request->type,
@@ -54,11 +59,8 @@ class StockController extends Controller
             'remarks' => $validated['remarks'],
             'user_id' => $user->id,
         ]);
-        
+
         return  redirect()->route('stock.index');
-
-   }
-
-
+    }
 
 }

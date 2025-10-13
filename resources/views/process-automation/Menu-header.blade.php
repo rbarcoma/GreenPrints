@@ -46,9 +46,9 @@
                                 </label>
                             </div>
                             @endforeach
-                           
+
                         </div>
-                  
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -56,7 +56,7 @@
                 </div>
                   </form>
                 </div>
-            </div>            
+            </div>
         </div>
 
         <table id="example" class="table   table-bordered">
@@ -73,17 +73,24 @@
                 <tr>
                     <td>{{ $headers->id }}</td>
                     <td>{{ $headers->name }}</td>
-                    <td>  
+                    <td>
                         <ul>
-                        @foreach ($headers->menus as $menu) 
+                        @foreach ($headers->menus as $menu)
                             <li>{{ $menu->name }}</li>
                         @endforeach
                         </ul>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $headers->id }}">
-                           Edit
-                        </button>
+                        <div class="d-flex">
+                            <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $headers->id }}">
+                                Edit
+                            </button>
+                            <form action="{{ route('menu-header.destroy', $headers->id) }}" method="POST" onsubmit="return confirm('Are you sure to delete this menu header?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-primary btn-danger">Delete</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
 
@@ -100,7 +107,7 @@
                             <form action="{{ route('menu-header.update', $headers->id) }}" method="POST">
                                 @csrf
                                 @method('PUT')
-                                
+
                                 <div class="mb-3">
                                     <label for="formGroupExampleInput" class="form-label">Name</label>
                                     <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please inpute header name" required name="name" value="{{ $headers->name }}">
@@ -108,8 +115,8 @@
 
                                 <div class="mb-3">
                                     <label for="formGroupExampleInput" class="form-label">Menus</label>
-                                   
-                                        
+
+
 
                             @foreach ($menuItem as $menuItems)
                                 <div class="form-check">
@@ -126,9 +133,9 @@
                                 </div>
                             @endforeach
 
-                                
+
                                 </div>
-                        
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -136,17 +143,17 @@
                         </div>
                         </form>
                         </div>
-                    </div>            
+                    </div>
                 </div>
 
 
                 @endforeach
-                
+
             </tbody>
-     
+
         </table>
     </section>
-    
+
 @stop
 
 {{-- @section('footer')

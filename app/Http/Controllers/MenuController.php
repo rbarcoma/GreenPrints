@@ -65,7 +65,14 @@ class MenuController extends Controller
         return redirect()->route('menu');
     }
 
+    public function destroy($id)
+    {
+        $itemCategory = MenuModel::findOrFail($id);
+        $itemCategory->delete();
 
+        return redirect()->route('menu');
+
+    }
 
 
 
@@ -118,4 +125,13 @@ class MenuController extends Controller
 
         return redirect()->route('menu-header')->with('success', 'Menu Header updated successfully!');
     }
+
+    public function destroyMenuHeader($id)
+    {
+        $menuHeader = menuHeaderModel::findOrFail($id);
+        $menuHeader->delete();
+
+        return redirect()->route('menu.role');
+    }
+
 }

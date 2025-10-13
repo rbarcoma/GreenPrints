@@ -57,7 +57,7 @@
                             <label for="formGroupExampleInput" class="form-group">Remarks</label>
                             <textarea class="form-control" placeholder="Leave a remarks here" id="floatingTextarea" name="remarks"></textarea>
                         </div>
-                    
+
                     </div>
 
                     <div class="modal-footer">
@@ -106,7 +106,7 @@
                             <label for="formGroupExampleInput" class="form-group">Remarks</label>
                             <textarea class="form-control" placeholder="Leave a remarks here" id="floatingTextarea" name="remarks"></textarea>
                         </div>
-                    
+
                     </div>
 
                     <div class="modal-footer">
@@ -138,7 +138,7 @@
      </table>
 
 
-  
+
 
 
 </section>

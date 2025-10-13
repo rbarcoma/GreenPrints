@@ -3,7 +3,7 @@
 @section('title', 'Item Category')
 
 @section('content_header')
-    <h1>Item Category</h1>
+    <h1>Item </h1>
 @stop
 
 @section('content')
@@ -31,10 +31,10 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Item Category Title</label>
+                            <label>Item Title</label>
                             <input type="text" class="form-control" placeholder="Please input category title" required name="name">
                         </div>
-                        
+
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-group">Item Description</label>
                             <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="description"></textarea>
@@ -49,9 +49,17 @@
                             </select>
                         </div>
 
-                          <div class="form-group">
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select name="status" class="form-control" required>
+                                <option value="active" selected>Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
                             <label>Item price</label>
-                            <input type="number" class="form-control" placeholder="Please item price" required name="price" min="0" value="0" step="0.01>
+                            <input type="number" class="form-control" placeholder="Please item price" required name="price" min="0" value="0" step="0.01">
                         </div>
 
                       <div class="mb-3">
@@ -67,13 +75,13 @@
                         </div>
 
                       <div class="mb-3 text-center">
-                        <img id="preview" 
-                            src="{{ asset('default_image/default_image.jpg') }}" 
-                            alt="Preview Image" 
-                            class="img-thumbnail mb-3" 
+                        <img id="preview"
+                            src="{{ asset('default_image/default_image.jpg') }}"
+                            alt="Preview Image"
+                            class="img-thumbnail mb-3"
                             style="max-width: 200px;">
                         </div>
-                    
+
                     </div>
 
 
@@ -99,15 +107,17 @@
                     <th>Barcode</th>
                     <th>Image</th>
                     <th>Action</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($item_collection as $collection)
+                @foreach ($item_collection as $collection) 
                     <tr>
                         <td>{{ $collection->id }}</td>
                         <td>{{ $collection->item_name }}</td>
                         {{-- <td>{{ $collection->item_desc }}</td> --}}
                         <td>{{ $collection->category->category_name }}</td>
+
                         <td>{{ number_format($collection->item_price, 2) }}</td>
                         <td>
                             {!! DNS1D::getBarcodeHTML($collection->barcode->barcode_value, 'PHARMA') !!}
@@ -119,7 +129,10 @@
 
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#viewModal{{ $collection->id }}">view</button>
+                            <button class="btn btn-sm btn-primary mr-2" data-toggle="modal" data-target="#viewModal{{ $collection->id }}">view</button>
+                        </td>
+                        <td>
+                            {{ $collection->status }}
                         </td>
                     </tr>
 
@@ -137,8 +150,8 @@
 
                                     <div class="modal-body">
                                         <div class="form-group">
- <img src="{{ asset('Item/images/' . $collection->image->image_name) }}" width="80" alt="Item Image"> <br>
-                            {{ $collection->image->image_name }}
+                                            <img src="{{ asset('Item/images/' . $collection->image->image_name) }}" width="80" alt="Item Image"> <br>
+                                            {{ $collection->image->image_name }}
                                         </div>
 
                                         <div class="form-group">
@@ -147,7 +160,7 @@
                                             <span>Barcode: {{ $collection->barcode->barcode_value }}</span>
                                         </div>
 
-                                    
+
                                         <div class="form-group">
                                             <label>Item Name</label>
                                             <input type="text" name="name" class="form-control"
@@ -169,18 +182,12 @@
                                             <input type="text" name="name" class="form-control"
                                                 value="{{ number_format($collection->item_price, 2) }}" disabled>
                                         </div>
-
-                                     
-
-
-
-
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                                      
+
                                     </div>
-                         
+
                             </div>
                         </div>
                     </div>

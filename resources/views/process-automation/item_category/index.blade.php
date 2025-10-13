@@ -37,6 +37,7 @@
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-group">Item Description</label>
                             <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="item_desc"></textarea>
+                            @error('item_desc') <div class="text-danger">{{ $message }}</div> @enderror
                         </div>
                     </div>
 
@@ -68,7 +69,14 @@
                         <td>{{ $category->category_name }}</td>
                         <td>{{ $category->category_desc}}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editModal{{ $category->id }}">Edit</button>
+                            <div class="d-flex">
+                                <button class="btn btn-sm btn-primary me-1 mr-2" data-toggle="modal" data-target="#editModal{{ $category->id }}">Edit</button>
+                                <form action="{{ route('item_category.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure to delete this category?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
 
@@ -96,6 +104,9 @@
                                          <div class="mb-3">
                                             <label for="formGroupExampleInput" class="form-label">Description</label>
                                             <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="item_desc"  >{{ $category->category_desc }}</textarea>
+                                             @error('item_desc')
+                                                <div class="text-danger">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
                                     <div class="modal-footer">

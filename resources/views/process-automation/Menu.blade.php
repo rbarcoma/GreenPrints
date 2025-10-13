@@ -119,11 +119,18 @@
                     <td>{{ $menus->icon }}</td>
                     <td>{{ $menus->parent ? $menus->parent->name : '' }}</td>
                     <td>{{ $menus->route }}</td>
-                    <td>
 
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $menus->id }}">
-                        Edit
-                    </button>
+                    <td>
+                        <div class="d-flex">
+                            <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $menus->id }}">
+                                Edit
+                            </button>
+                            <form action="{{ route('menu.destroy', $menus->id) }}" method="POST" onsubmit="return confirm('Are you sure to delete this category?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-primary btn-danger">Delete</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
 
