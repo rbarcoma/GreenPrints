@@ -111,7 +111,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($item_collection as $collection) 
+                @foreach ($item_collection as $collection)
                     <tr>
                         <td>{{ $collection->id }}</td>
                         <td>{{ $collection->item_name }}</td>
@@ -175,6 +175,12 @@
                                             <label>Category Name</label>
                                             <input type="text" name="name" class="form-control"
                                                 value="{{ $collection->category->category_name }}" disabled>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <input type="text" name="name" class="form-control"
+                                                value="{{ $collection->status }}" disabled>
                                         </div>
 
                                         <div class="form-group">
