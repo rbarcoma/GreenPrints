@@ -44,7 +44,7 @@
 
 @section('js')
     <script>
-        
+
     </script>
     <script> console.log("Hi, I'm using the Laravel-AdminLTE package!"); </script>
 @stop

@@ -63,9 +63,9 @@ return [
     |
     */
 
-    'logo' => '<b>Evolution</b>',
-    'logo_img' => null,
-    'logo_img_class' => null,
+    'logo' => '<b>GreenPrints</b>',
+    'logo_img' => 'logo/greenprints.jpg',
+    'logo_img_class' => 'brand-image-xs elevation-1',
     'logo_img_xl' => null,
     'logo_img_xl_class' => null,
     'logo_img_alt' => null,
