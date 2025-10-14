@@ -119,9 +119,13 @@
                         <td>{{ $collection->category->category_name }}</td>
 
                         <td>{{ number_format($collection->item_price, 2) }}</td>
-                        <td>
-                            {!! DNS1D::getBarcodeHTML($collection->barcode->barcode_value, 'EAN13') !!}
-                            Barcode: {{ $collection->barcode->barcode_value }}
+                        <td style="text-align: center; vertical-align: middle;">
+                            <div style="display: inline-block; text-align: center;">
+                                {!! DNS1D::getBarcodeHTML($collection->barcode->barcode_value, 'EAN13', 2, 60) !!}
+                                <div style="font-family: monospace; font-size: 14px; letter-spacing: 2px; margin-top: 4px;">
+                                   BARCODE {{ $collection->barcode->barcode_value }}
+                                </div>
+                            </div>
                         </td>
                         <td>
                             <img src="{{ asset('Item/images/' . $collection->image->image_name) }}" width="80" alt="Item Image"> <br>
@@ -156,8 +160,15 @@
 
                                         <div class="form-group">
                                             <label>Barcode</label>
-                                            <span>{!! DNS1D::getBarcodeHTML($collection->barcode->barcode_value, 'PHARMA') !!}</span>
-                                            <span>Barcode: {{ $collection->barcode->barcode_value }}</span>
+                                            <br>
+                                              <span style="text-align: center; vertical-align: middle;">
+                                                <div style="display: inline-block; text-align: center;">
+                                                    {!! DNS1D::getBarcodeHTML($collection->barcode->barcode_value, 'EAN13', 2, 60) !!}
+                                                    <div style="font-family: monospace; font-size: 14px; letter-spacing: 2px; margin-top: 4px;">
+                                                    BARCODE {{ $collection->barcode->barcode_value }}
+                                                    </div>
+                                                </div>
+                                            </span>
                                         </div>
 
 
