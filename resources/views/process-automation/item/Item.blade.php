@@ -120,7 +120,7 @@
 
                         <td>{{ number_format($collection->item_price, 2) }}</td>
                         <td>
-                            {!! DNS1D::getBarcodeHTML($collection->barcode->barcode_value, 'PHARMA') !!}
+                            {!! DNS1D::getBarcodeHTML($collection->barcode->barcode_value, 'EAN13') !!}
                             Barcode: {{ $collection->barcode->barcode_value }}
                         </td>
                         <td>
