@@ -121,8 +121,8 @@
                         <td>{{ number_format($collection->item_price, 2) }}</td>
                         <td style="text-align: center; vertical-align: middle;">
                             <div style="display: inline-block; text-align: center;">
-                                {!! DNS1D::getBarcodeHTML($collection->barcode->barcode_value, 'EAN13', 2, 60) !!}
-                                <div style="font-family: monospace; font-size: 14px; letter-spacing: 2px; margin-top: 4px;">
+                                {!! DNS1D::getBarcodeHTML($collection->barcode->barcode_value, 'C128', 2, 60) !!}
+                                <div style="font-family: monospace; font-size: 14px; letter-spacing: 2EAN13px; margin-top: 4px;">
                                    BARCODE {{ $collection->barcode->barcode_value }}
                                 </div>
                             </div>
@@ -132,12 +132,15 @@
                             {{ $collection->image->image_name }}
 
                         </td>
+
+                         <td>
+                            {{-- {{ $collection->status }} --}}
+                             <span class="badge badge-secondary"> {{ $collection->status }} </span>
+                        </td>
                         <td>
                             <button class="btn btn-sm btn-primary mr-2" data-toggle="modal" data-target="#viewModal{{ $collection->id }}">view</button>
                         </td>
-                        <td>
-                            {{ $collection->status }}
-                        </td>
+
                     </tr>
 
                     <!-- View Modal -->

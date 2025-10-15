@@ -65,7 +65,7 @@ return [
 
     'logo' => '<b>GreenPrints</b>',
     'logo_img' => 'logo/greenprints.jpg',
-    'logo_img_class' => 'brand-image-xs elevation-1',
+    'logo_img_class' => 'brand-image-xs elevation-1 mr-2',
     'logo_img_xl' => null,
     'logo_img_xl_class' => null,
     'logo_img_alt' => null,
@@ -121,11 +121,11 @@ return [
         'enabled' => true,
         'mode' => 'fullscreen',
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-            'alt' => 'AdminLTE Preloader Image',
+            'path' => 'images/gprints.png',
+            'alt' => 'my own logo',
             'effect' => 'animation__shake',
-            'width' => 60,
-            'height' => 60,
+            'width' => 70,
+            'height' => 70,
         ],
     ],
 
@@ -204,7 +204,7 @@ return [
     'classes_content_wrapper' => '',
     'classes_content_header' => '',
     'classes_content' => '',
-    'classes_sidebar' => 'sidebar-dark-primary elevation-4',
+    'classes_sidebar' => 'sidebar-light-primary elevation-4',
     'classes_sidebar_nav' => '',
     'classes_topnav' => 'navbar-white navbar-light',
     'classes_topnav_nav' => 'navbar-expand',
