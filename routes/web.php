@@ -65,6 +65,7 @@ Route::controller(RoleController::class)->middleware('auth')->group(function () 
 Route::controller(ItemController::class)->middleware('auth')->group(function () {
     Route::get('/items', 'index')->name('item.index');
     Route::post('/items', 'createItem')->name('item.create');
+    Route::get('/get-item/{barcode}','getItem')->name('item.scan');
 });
 
 
@@ -79,4 +80,5 @@ Route::controller(ItemCategoryController::class)->middleware('auth')->group(func
 Route::controller(StockController::class)->middleware('auth')->group(function(){
     Route::get('/stock', 'index')->name('stock.index');
     Route::post('/stock','StockIn')->name('stock.stockIn');
+   
 });

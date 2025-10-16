@@ -70,6 +70,26 @@ class ItemController extends Controller
     }
 
 
+    public function getItem($barcode)
+    {
+        $barcodeRecord = ItemBarcode::where('barcode_value', $barcode)
+        ->with('item') // load related item
+        ->first();
+
+        if (!$barcodeRecord || !$barcodeRecord->item) {
+            return response()->json(['error' => 'Item not found'], 404);
+        }
+
+        // Kunin ang item data
+        $item = $barcodeRecord->item;
+
+        return response()->json([
+            'barcode' => $barcodeRecord->barcode_value,
+            'item_name' => $item->item_name,
+            'price' => $item->item_price,
+        ]);
+    }
+
 
 
 }

@@ -13,4 +13,9 @@ class ItemBarcode extends Model
     protected $table = 'item_barcode';
 
     protected $fillable = ['item_id', 'barcode_value'];
+
+    public function item()
+    {
+        return $this->belongsTo(ItemModel::class, 'item_id');
+    }
 }
