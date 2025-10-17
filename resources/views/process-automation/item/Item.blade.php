@@ -166,7 +166,7 @@
                                             <br>
                                               <span style="text-align: center; vertical-align: middle;">
                                                 <div style="display: inline-block; text-align: center;">
-                                                    {!! DNS1D::getBarcodeHTML($collection->barcode->barcode_value, 'EAN13', 2, 60) !!}
+                                                    {!! DNS1D::getBarcodeHTML($collection->barcode->barcode_value, 'C128', 2, 60) !!}
                                                     <div style="font-family: monospace; font-size: 14px; letter-spacing: 2px; margin-top: 4px;">
                                                     BARCODE {{ $collection->barcode->barcode_value }}
                                                     </div>
