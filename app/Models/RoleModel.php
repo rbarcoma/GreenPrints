@@ -10,16 +10,16 @@ class RoleModel extends Model
     use HasFactory;
 
 
-    protected $table = 'role';
+    // protected $table = 'role';
 
-    protected $fillable = ['name', 'slug', 'description', 'menu_ids'];
+    // protected $fillable = ['name', 'slug', 'description', 'menu_ids'];
 
-    protected $casts = [
-        'menu_ids' => 'array',
-    ];
+    // protected $casts = [
+    //     'menu_ids' => 'array',
+    // ];
 
-    public function getMenusAttribute()
-    {
-        return MenuModel::whereIn('id', $this->menu_ids)->get();
-    }
+    // public function getMenusAttribute()
+    // {
+    //     return MenuModel::whereIn('id', $this->menu_ids)->get();
+    // }
 }

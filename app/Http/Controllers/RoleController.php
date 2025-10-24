@@ -8,68 +8,68 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    public function roleIndex()
-    {
+    // public function roleIndex()
+    // {
 
-        $menus = MenuModel::all();
+    //     $menus = MenuModel::all();
 
-        $roles = RoleModel::all();
+    //     $roles = RoleModel::all();
 
-        return view('admin.role', compact('roles', 'menus'));
-    }
-
-
-    public function roleCreation(Request $request)
-    {
-
-        $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'slug'        => 'nullable|string',
-            'description' => 'nullable|string',
-            'menus'       => 'array|nullable',
-        ]);
-
-        // dd($validated['menus']);
-
-        RoleModel::create([
-            'name'         => $validated['name'],
-            'slug'         => $validated['slug'],
-            'description'  => $validated['description'],
-            'menu_ids'     => $validated['menus'] ?? [],
-        ]);
-
-        return redirect()->route('menu.role');
-    }
+    //     return view('admin.role', compact('roles', 'menus'));
+    // }
 
 
-    public function updateRole($id, Request $request)
-    {
+    // public function roleCreation(Request $request)
+    // {
 
-        $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'slug'        => 'nullable|string',
-            'description' => 'nullable|string',
-            'menus'       => 'array|nullable',
-        ]);
+    //     $validated = $request->validate([
+    //         'name'        => 'required|string|max:255',
+    //         'slug'        => 'nullable|string',
+    //         'description' => 'nullable|string',
+    //         'menus'       => 'array|nullable',
+    //     ]);
 
-        $role = RoleModel::findOrFail($id);
+    //     // dd($validated['menus']);
 
-        $role->update([
-            'name'         => $validated['name'],
-            'slug'         => $validated['slug'],
-            'description'  => $validated['description'],
-            'menu_ids'     => $validated['menus'] ?? [],
-        ]);
+    //     RoleModel::create([
+    //         'name'         => $validated['name'],
+    //         'slug'         => $validated['slug'],
+    //         'description'  => $validated['description'],
+    //         'menu_ids'     => $validated['menus'] ?? [],
+    //     ]);
 
-        return redirect()->route('menu.role');
-    }
+    //     return redirect()->route('menu.role');
+    // }
 
-    public function destroy($id)
-    {
-        $itemCategory = RoleModel::findOrFail($id);
-        $itemCategory->delete();
 
-        return redirect()->route('menu.role');
-    }
+    // public function updateRole($id, Request $request)
+    // {
+
+    //     $validated = $request->validate([
+    //         'name'        => 'required|string|max:255',
+    //         'slug'        => 'nullable|string',
+    //         'description' => 'nullable|string',
+    //         'menus'       => 'array|nullable',
+    //     ]);
+
+    //     $role = RoleModel::findOrFail($id);
+
+    //     $role->update([
+    //         'name'         => $validated['name'],
+    //         'slug'         => $validated['slug'],
+    //         'description'  => $validated['description'],
+    //         'menu_ids'     => $validated['menus'] ?? [],
+    //     ]);
+
+    //     return redirect()->route('menu.role');
+    // }
+
+    // public function destroy($id)
+    // {
+    //     $itemCategory = RoleModel::findOrFail($id);
+    //     $itemCategory->delete();
+
+    //     return redirect()->route('menu.role');
+    // }
 
 }

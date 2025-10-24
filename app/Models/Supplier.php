@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ItemBarcode extends Model
+class Supplier extends Model
 {
     use HasFactory;
 
-
-    // protected $table = 'item_barcode';
-
-    // protected $fillable = ['item_id', 'barcode_value'];
+    protected $fillable = [
+        'company_name',
+        'contact',
+        'email',
+        'address',
+    ];
 }
