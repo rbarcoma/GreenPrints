@@ -41,18 +41,20 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0">Role List</h4>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                 Create Role
             </button>
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"  aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog  modal-lg modal-dialog-centered">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Menu creation</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="exampleModalLabel">Menu creation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span>&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('menu.role-creation') }}" method="POST">
@@ -91,7 +93,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
                   </form>
@@ -99,7 +101,7 @@
             </div>
         </div>
 
-        <table id="example" class="table   table-bordered">
+        <table id="roleTable" class="table   table-bordered">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -127,7 +129,7 @@
 
                     <td>
                         <div class="d-flex">
-                            <button type="button" class="btn btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $role->id }}">Edit</button>
+                            <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#exampleModal{{ $role->id }}">Edit</button>
                             <form action="{{ route('menu.role.destroy', $role->id) }}" method="POST" onsubmit="return confirm('Are you sure to delete this category?');">
                                 @csrf
                                 @method('DELETE')
@@ -142,8 +144,10 @@
             <div class="modal-dialog  modal-lg modal-dialog-centered">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Role: {{ $role->name }}</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title fs-5" id="exampleModalLabel">Edit Role: {{ $role->name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span>&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('menu.role-update',$role->id) }}" method="POST">
@@ -189,7 +193,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save changes</button>
                 </div>
                   </form>
@@ -206,38 +210,19 @@
 
 @stop
 
-{{-- @section('footer')
-    <div class="float-right">
-        Version: {{ config('app.version', '1.0.0') }}
-    </div>
-
-    <strong>
-        <a href="{{ config('app.company_url', '#') }}">
-            {{ config('app.company_name', 'My company') }}
-        </a>
-    </strong>
-@stop --}}
-
-
-@section('css')
- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap5.min.css') }}">
-@stop
 
 @section('js')
-    <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('js/dataTables.bootstrap5.min.js') }}"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
-
-    {{-- Initialize DataTable --}}
     <script>
-        $(document).ready(function() {
-            $('#example').DataTable();
+        $(function () {
+            $('#roleTable').DataTable({
+                responsive: true,
+                autoWidth: true,
+                pageLength: 10,
+                language: {
+                    search: "Search:",
+                    lengthMenu: "Show _MENU_ entries",
+                }
+            });
         });
     </script>
-
-    <script>console.log("✅ DataTables is now working with AdminLTE!");</script>
 @stop

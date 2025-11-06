@@ -9,36 +9,64 @@
 @section('content')
 <section class="border p-3 card">
 
-<button id="useCameraBtn" class="btn btn-success">Use Camera</button>
-<button id="useScannerBtn" class="btn btn-primary">Use Scanner</button>
-
-<input type="text" id="barcodeInput" class="form-control mt-2" placeholder="Scan barcode..." autofocus>
-
-<div id="reader" style="width: 350px; height: 250px; display:none;" class="mt-3 border"></div>
-
-<table class="table table-bordered mt-3" id="item-list">
-    <thead>
-        <tr>
-            <th>Barcode</th>
-            <th>Name</th>
-            <th>Price</th>
-             <th style="width: 120px;">Action</th>
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
-
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0">Stock List</h4>
         <div class="">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModal">
-            Stock In
-        </button>
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#stockOutModal">
-            Stock Out
-        </button>
+                 Stock In
+            </button>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#stockOutModal">
+                Stock Out
+            </button>
+
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#startCamera">Use Scanner</button>
+        </div>
+        
+    </div>
+
+    {{-- Carmera in user start part --}}
+    <div class="modal fade"  id="startCamera" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true" >
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="useCameraLabel">Camera Scanner</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <button id="useCameraBtn" class="btn btn-success">Use Camera</button>
+                    <button id="useScannerBtn" class="btn btn-primary">Use Scanner</button>
+
+                    <input type="text" id="barcodeInput" class="form-control mt-2" placeholder="Scan barcode..." autofocus>
+
+                <div id="reader" style="width: 250px; height: 180px; display:none;overflow:hidden" class="viewport mx-auto"></div>
+
+
+                    <table class="table table-bordered mt-3" id="item-list">
+                        <thead>
+                            <tr>
+                                <th>Barcode</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th style="width: 120px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                     <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
         </div>
     </div>
+
+
+
 
     <!-- Create Modal -->
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
@@ -229,7 +257,7 @@
 @stop
 
 @section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const barcodeInput = document.getElementById('barcodeInput');
@@ -272,15 +300,24 @@ document.addEventListener('DOMContentLoaded', function() {
             inputStream: {
                 name: "Live",
                 type: "LiveStream",
-                target: readerDiv,
-                constraints: { facingMode: "environment" }
+                target: document.querySelector('#reader'),
+                constrainsts: {
+                    width: 320,      
+                    height: 240, 
+                    facingMode: "environment"
+                }
             },
-            decoder: { readers: ["code_128_reader", "ean_reader", "ean_8_reader"] }
+            locator: {
+                patchSize: "medium", // or "small" for faster detection
+                halfSample: true
+            },
+            decoder: { readers: ["code_128_reader", "ean_reader", "ean_8_reader"] },
+            locate: true
         }, function(err) {
             if (err) { console.error("Camera init error:", err); return; }
             Quagga.start();
             cameraActive = true;
-            console.log("Camera started...");
+            console.log("Camera ready.");
         });
 
         Quagga.onDetected(data => {
@@ -301,7 +338,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- MAIN HANDLER ---
     function handleScannedCode(barcode) {
         console.log("Scanned:", barcode);
-
         fetch(`/get-item/${barcode}`)
             .then(res => res.json())
             .then(data => {
@@ -361,8 +397,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
-</script>
-<script>
+
+
+
+
+$(function () {
+    $('#StockInTable').DataTable({
+        responsive: true,
+        autoWidth: true,
+        pageLength: 10,
+        language: {
+            search: "Search:",
+            lengthMenu: "Show _MENU_ entries",
+        }
+    });
+});
+
 $(function () {
     $('#itemCategoryTable').DataTable({
         responsive: true,
@@ -373,18 +423,10 @@ $(function () {
             lengthMenu: "Show _MENU_ entries",
         }
     });
+});
 
-    $('#StockInTable').DataTable({
-        responsive: true,
-        autoWidth: true,
-        pageLength: 10,
-        language: {
-            search: "Search:",
-            lengthMenu: "Show _MENU_ entries",
-        }
-    });
-
-      $('#StockOutTable').DataTable({
+$(function () {
+    $('#StockOutTable').DataTable({
         responsive: true,
         autoWidth: true,
         pageLength: 10,
@@ -395,4 +437,18 @@ $(function () {
     });
 });
 </script>
+
+
 @stop
+
+@section('css')
+<style>
+    #reader video {
+        width: 100% !important;
+        height: auto !important;
+        max-height: 200px !important; 
+        object-fit: contain !important;
+    }
+</style>
+
+@endsection

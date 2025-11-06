@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItemCategoryController;
@@ -8,7 +9,9 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ChangePasswordController;
 use Illuminate\Support\Facades\Redirect;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,6 +33,7 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
+
 Route::controller(MenuController::class)->middleware('auth')->group(function () {
     Route::get('/menu', 'index')->name('menu');
     route::post('/menu', 'createMenu')->name('createMenu');
@@ -49,6 +53,7 @@ Route::controller(UserController::class)->middleware('auth')->group(function () 
 
     Route::get('/user', 'userIndex')->name('menu.user');
     Route::post('/user', 'userCreate')->name('menu.user-create');
+    Route::post('/user/{id}', 'changePassword')->name('password.change');
 });
 
 
@@ -65,7 +70,7 @@ Route::controller(RoleController::class)->middleware('auth')->group(function () 
 Route::controller(ItemController::class)->middleware('auth')->group(function () {
     Route::get('/items', 'index')->name('item.index');
     Route::post('/items', 'createItem')->name('item.create');
-    Route::get('/get-item/{barcode}','getItem')->name('item.scan');
+    Route::get('/get-item/{barcode}', 'getItem')->name('item.scan');
 });
 
 
@@ -77,8 +82,7 @@ Route::controller(ItemCategoryController::class)->middleware('auth')->group(func
 });
 
 
-Route::controller(StockController::class)->middleware('auth')->group(function(){
+Route::controller(StockController::class)->middleware('auth')->group(function () {
     Route::get('/stock', 'index')->name('stock.index');
-    Route::post('/stock','StockIn')->name('stock.stockIn');
-   
+    Route::post('/stock', 'StockIn')->name('stock.stockIn');
 });
