@@ -181,7 +181,6 @@
                             <label for="formGroupExampleInput" class="form-label">Route</label>
                             <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input route" name="route" value="{{ $menus->route }}">
                         </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
