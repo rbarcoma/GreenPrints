@@ -38,7 +38,7 @@ class StockController extends Controller
     public function StockIn(Request $request)
     {
         $user = Auth::user();
-        $user->id;
+    
 
         $validated = $request->validate([
             'item' => 'required|string',
@@ -52,13 +52,17 @@ class StockController extends Controller
             return back()->with('error', 'Cannot add stock for inactive item.');
         }
 
+
+
         StockModel::create([
             'item_id' => $validated['item'],
-            'type' => $request->type,
+            'type'    => $request->type,
             'quantity'=> $validated['quantity'],
             'remarks' => $validated['remarks'],
-            'user_id' => $user->id,
+            'user_id' =>  $user->id,
         ]);
+
+    
 
         return  redirect()->route('stock.index');
     }
