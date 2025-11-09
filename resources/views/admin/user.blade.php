@@ -9,7 +9,7 @@
 @section('content')
     <p>Welcome to this beautiful admin panel.</p>
 
-    @if ($errors->any())
+    {{-- @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
                 @foreach ($errors->all() as $error)
@@ -17,87 +17,132 @@
                 @endforeach
             </ul>
         </div>
+    @endif --}}
+
+    @if($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @foreach ($errors->all() as $error)
+                {{ $error }} <br>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true" class="text-light">&times;</span>
+                </button>
+            @endforeach
+        </div>
     @endif
 
 
     {{-- toast message --}}
 
-        @if(session('success'))
-
+        {{-- @if(session('success'))
         <div class="alert aler-success">
             <strong class="mr-auto">Success</strong>
             <span>{{ session('success') }}</span>
         </div>
-        @endif
+        @endif --}}
 
-        @if(session('error'))
+        {{-- @if(session('error'))
              <div class="alert aler-success">
                 <strong class="mr-auto">Error</strong>
                 <span>{{ session('error') }}</span>
             </div>
-        @endif
+        @endif --}}
 
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" class="text-light">&times;</span>
+            </button>
+        </div>
+    @endif
 
 
     <section class="border p-3 card">
 
-
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0">Admin User List</h4>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUserModal">
                 Create User
             </button>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog  modal-lg modal-dialog-centered">
+        <!-- Create User Modal -->
+        <div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title fs-5" id="exampleModalLabel">User creation</h5>
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span>&times;</span>
-                     </button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('createMenu') }}" method="POST">
+                    <form action="{{ route('menu.user-create') }}" method="POST">
                         @csrf
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input name" required name="name">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="createUserModalLabel">Create User</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span>&times;</span>
+                            </button>
                         </div>
 
-                         <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Slug</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input slug" name="slug">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <div class="mt-2 p-2 border rounded bg-light" style="font-size: 15px;">
+                                    <strong>Password Requirements:</strong>
+                                    <ul class="list-unstyled mb-0 mt-2">
+                                        <li id="req-length" class="text-success">✅ Minimum 8 characters</li>
+                                        <li id="req-uppercase" class="text-success">✅ At least 1 uppercase letter</li>
+                                        <li id="req-lowercase" class="text-success">✅ At least 1 lowercase letter</li>
+                                        <li id="req-number" class="text-success">✅ At least 1 number</li>
+                                        <li id="req-symbol" class="text-success">✅ At least 1 special character (@$!%*#?&)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                          
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-control" placeholder="Enter name" name="name" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" placeholder="Enter email" name="email" required>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" class="form-control" placeholder="Enter password" name="password" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" placeholder="Confirm password" name="password_confirmation" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Role</label>
+                                <select name="role" class="form-control" required>
+                                    <option value="Admin">Admin</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select name="status" class="form-control" required>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+
                         </div>
 
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Icon</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input icon"  name="icon">
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-success">Create User</button>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Role</label>
-                        </div>
+                    </form>
 
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Status</label>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-label">Route</label>
-                            <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input route" name="route">
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Save changes</button>
-                </div>
-                  </form>
                 </div>
             </div>
         </div>
+
+        {{-- TABLE --}}
         <table id="userTable" class="table   table-bordered">
             <thead>
                 <tr>
@@ -115,16 +160,73 @@
                     <td>{{ $user->id }}</td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
-                    <td>Role</td>
-                    <td></td>
+                    <td>{{ $user->role }}</td>
+                    <td>{{ $user->status }}</td>
                     <td>
-                        <button type="button" class="btn btn-primary">Edit</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editUser{{ $user->id }}">
+                            Edit
+                        </button>
                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#changePassword{{ $user->id }}" >
                             Change Password
                         </button>
                     </td>
                 </tr>
 
+                <!-- Edit User Modal -->
+                <div class="modal fade" id="editUser{{ $user->id }}" tabindex="-1" aria-labelledby="editUserLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editUserLabel">Edit User: {{ $user->name }}</h5>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+
+                            <form action="{{ route('menu.user-update', $user->id) }}" method="POST">
+                                @csrf
+                                @method('PUT')
+
+                                <div class="modal-body">
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label">Name</label>
+                                        <input type="text" class="form-control" name="name" value="{{ $user->name }}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" name="email" value="{{ $user->email }}" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Role</label>
+                                        <select class="form-control" name="role" required>
+                                            <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Admin</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Status</label>
+                                        <select class="form-control" name="status" required>
+                                            <option value="active" {{ $user->status == 'active' ? 'selected' : '' }}>Active</option>
+                                            <option value="inactive" {{ $user->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success">Save changes</button>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
 
                 {{-- change Password Modal part start --}}
                 <div class="modal fade" id="changePassword{{ $user->id }}" tabindex="-1" aria-labelledby="changePassword" aria-hidden="true">
@@ -138,7 +240,19 @@
                         </div>
                         <div class="modal-body">
                             <form action="{{ route('password.change', $user->id) }}" method="POST">
-                                @csrf
+                            @csrf
+                            <div class="mb-3">
+                                <div class="mt-2 p-2 border rounded bg-light" style="font-size: 15px;">
+                                    <strong>Password Requirements:</strong>
+                                    <ul class="list-unstyled mb-0 mt-2">
+                                        <li id="req-length" class="text-success">✅ Minimum 8 characters</li>
+                                        <li id="req-uppercase" class="text-success">✅ At least 1 uppercase letter</li>
+                                        <li id="req-lowercase" class="text-success">✅ At least 1 lowercase letter</li>
+                                        <li id="req-number" class="text-success">✅ At least 1 number</li>
+                                        <li id="req-symbol" class="text-success">✅ At least 1 special character (@$!%*#?&)</li>
+                                    </ul>
+                                </div>
+                            </div>
                             <div class="mb-3">
                                 <label for="formGroupExampleInput" class="form-label">Current Password</label>
                                 <input type="password" class="form-control" id="formGroupExampleInput" placeholder="Please input current password" required name="currentPassword">
@@ -153,9 +267,7 @@
                                 <label for="formGroupExampleInput" class="form-label">Confirm New Password</label>
                                 <input type="password" class="form-control" id="formGroupExampleInput" placeholder="Confirm new password" required name="confirmPassword">
                             </div>
-                             
                         </div>
-
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Submit changes</button>
@@ -163,14 +275,14 @@
                             </form>
                     </div>
                 </div>
-
                 {{-- change Password Modal part end --}}
-                
+
                 @endforeach
 
             </tbody>
 
         </table>
+
     </section>
 
 @stop

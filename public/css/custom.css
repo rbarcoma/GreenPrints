@@ -1,0 +1,20 @@
+/* Sidebar search text color */
+.sidebar-light-primary .form-control-sidebar {
+    color: #000 !important;
+}
+
+/* Placeholder color */
+.sidebar-light-primary .form-control-sidebar::placeholder {
+    color: #6c757d !important;
+}
+
+/* Background of input */
+.sidebar-light-primary .form-control-sidebar {
+    background-color: #fff !important;
+}
+
+/* Border on focus */
+.sidebar-light-primary .form-control-sidebar:focus {
+    border-color: #3c8dbc !important;
+    box-shadow: none !important;
+}

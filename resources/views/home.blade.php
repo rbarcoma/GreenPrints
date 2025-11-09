@@ -34,6 +34,11 @@
 @section('content')
     <p>Welcome to this beautiful admin panel.</p>
 
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 
   <div class="mx-2">
      <div class="row">

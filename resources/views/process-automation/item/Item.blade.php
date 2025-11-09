@@ -106,8 +106,8 @@
                     <th>Price</th>
                     <th>Barcode</th>
                     <th>Image</th>
-                    <th>Action</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>

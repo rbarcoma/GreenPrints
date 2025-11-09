@@ -30,9 +30,9 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-
+Route::middleware(['auth', 'checkStatus'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+});
 
 Route::controller(MenuController::class)->middleware('auth')->group(function () {
     Route::get('/menu', 'index')->name('menu');
@@ -48,15 +48,14 @@ Route::controller(MenuController::class)->middleware('auth')->group(function () 
     Route::delete('/menu-header/{id}', 'destroyMenuHeader')->name('menu-header.destroy');
 });
 
+    Route::controller(UserController::class)->group(function () {
 
-Route::controller(UserController::class)->middleware('auth')->group(function () {
+        Route::get('/user', 'userIndex')->name('menu.user');
+        Route::post('/user', 'userCreate')->name('menu.user-create');
+        Route::put('/user/update/{id}', 'userUpdate')->name('menu.user-update');
+        Route::post('/user/{id}', 'changePassword')->name('password.change');
 
-    Route::get('/user', 'userIndex')->name('menu.user');
-    Route::post('/user', 'userCreate')->name('menu.user-create');
-    Route::post('/user/{id}', 'changePassword')->name('password.change');
-});
-
-
+    });
 
 Route::controller(RoleController::class)->middleware('auth')->group(function () {
 
@@ -87,3 +86,5 @@ Route::controller(StockController::class)->middleware('auth')->group(function ()
     Route::get('/stock', 'index')->name('stock.index');
     Route::post('/stock', 'StockIn')->name('stock.stockIn');
 });
+
+

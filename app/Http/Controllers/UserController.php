@@ -16,13 +16,68 @@ class UserController extends Controller
         return view('admin.user', compact('users'));
     }
 
+    public function userCreate(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+
+            // STRONG PASSWORD RULES:
+            'password' => [
+                'required',
+                'confirmed',
+                'min:8',
+                'regex:/[A-Z]/',      // uppercase
+                'regex:/[a-z]/',      // lowercase
+                'regex:/[0-9]/',      // number
+                'regex:/[@$!%*#?&]/', // special character
+            ],
+            
+            'role' => 'required|string',
+            'status' => 'required|in:active,inactive'
+        ], [
+
+            // CUSTOM ERROR MESSAGES:
+            'password.confirmed' => 'Password confirmation does not match.',
+            'password.min' => 'Password must be at least 8 characters long.',
+            'password.regex' => 'Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character (@$!%*#?&).',
+        ]);
+
+        // Store user
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('menu.user')->with('success', 'User created successfully!');
+    }
+
+
     public function changePassword(Request $request, $id)
     {
-       
+
        $request->validate([
-          'currentPassword' => 'required',
-          'newPassword'      => 'required|min:8|same:confirmPassword'
-       ]);
+            'currentPassword' => 'required',
+
+            // STRONG PASSWORD RULE
+            'newPassword' => [
+                'required',
+                'min:8',
+                'same:confirmPassword',
+                'regex:/[A-Z]/',      // at least 1 uppercase
+                'regex:/[a-z]/',      // at least 1 lowercase
+                'regex:/[0-9]/',      // at least 1 number
+                'regex:/[@$!%*#?&]/', // at least 1 special character
+            ],
+        ], [
+
+            'newPassword.min' => 'New password must be at least 8 characters.',
+            'newPassword.same' => 'New password confirmation does not match.',
+            'newPassword.regex' => 'New password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character (@$!%*#?&).',
+        ]);
 
        $user = User::findOrFail($id);
 
@@ -33,8 +88,27 @@ class UserController extends Controller
        $user->password = Hash::make($request->newPassword);
        $user->save();
 
-
        return redirect()->route('menu.user')->with('success', 'Password changed successfully!');
-
     }
+
+    public function userUpdate(Request $request, $id)
+    {
+        $request->validate([
+            'name'  => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'role'  => 'required|string',
+            'status'=> 'required|string'
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->role = $request->role;
+        $user->status = $request->status;
+        $user->save();
+
+        return redirect()->route('menu.user')->with('success', 'User updated successfully!');
+    }
+    
 }
