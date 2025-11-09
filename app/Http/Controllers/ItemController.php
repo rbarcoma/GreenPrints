@@ -100,7 +100,6 @@ class ItemController extends Controller
             'new_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Update fields
         $item->item_desc = $request->description;
         $item->status = $request->status;
         $item->save();

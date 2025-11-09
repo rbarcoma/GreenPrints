@@ -107,7 +107,6 @@
 
         {{-- <pre>
         {{ print_r($stockIn, true) }}
-
         </pre> --}}
 
     <div class="d-flex">
@@ -136,11 +135,7 @@
     </div>
 
 
-
 @stop
-
-
-
 @section('css')
     {{-- Add here extra stylesheets --}}
     {{-- <link rel="stylesheet" href="/css/admin_custom.css"> --}}
@@ -169,7 +164,6 @@
                     borderColor: 'rgba(255,99,132,1)',
                     borderWidth: 1
                 }],
-
             },
             options:{
                 responsive:true,
@@ -222,7 +216,6 @@
 
       });
   </script>
-
 
 
 @stop
