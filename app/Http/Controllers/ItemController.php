@@ -30,7 +30,7 @@ class ItemController extends Controller
             'description' => 'required|string',
             'category' => 'required',
             'price' => 'required|numeric',
-            'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             'status' => 'required|in:active,inactive',
         ]);
 
@@ -90,6 +90,43 @@ class ItemController extends Controller
         ]);
     }
 
+    public function updateItem(Request $request, $id)
+    {
+        $item = ItemModel::findOrFail($id);
 
+        $request->validate([
+            'description' => 'required|string',
+            'status' => 'required|in:active,inactive',
+            'new_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        // Update fields
+        $item->item_desc = $request->description;
+        $item->status = $request->status;
+        $item->save();
+
+        if ($request->hasFile('new_image')) {
+
+            // delete old image if exists
+            if ($item->image && file_exists(public_path($item->image->image_path))) {
+                unlink(public_path($item->image->image_path));
+            }
+
+            $file = $request->file('new_image');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            $folderPath = 'item/images';
+            $file->move(public_path($folderPath), $fileName);
+
+            // update or create image record
+            ItemImage::updateOrCreate(
+                ['item_id' => $item->id],
+                [
+                    'image_name' => $fileName,
+                    'image_path' => $folderPath . '/' . $fileName
+                ]
+            );
+        }
+        return redirect()->route('item.index')->with('success', 'Item updated successfully');
+    }
 
 }

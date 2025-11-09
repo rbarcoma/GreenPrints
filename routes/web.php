@@ -70,6 +70,7 @@ Route::controller(RoleController::class)->middleware('auth')->group(function () 
 Route::controller(ItemController::class)->middleware('auth')->group(function () {
     Route::get('/items', 'index')->name('item.index');
     Route::post('/items', 'createItem')->name('item.create');
+    Route::put('/items/{id}', 'updateItem')->name('item.update');
     Route::get('/get-item/{barcode}', 'getItem')->name('item.scan');
 });
 

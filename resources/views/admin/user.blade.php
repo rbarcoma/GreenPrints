@@ -54,7 +54,7 @@
             <div class="modal-dialog  modal-lg modal-dialog-centered">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title fs-5" id="exampleModalLabel">Menu creation</h5>
+                    <h5 class="modal-title fs-5" id="exampleModalLabel">User creation</h5>
                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span>&times;</span>
                      </button>
@@ -85,22 +85,19 @@
                             <label for="formGroupExampleInput" class="form-label">Status</label>
                         </div>
 
-
                         <div class="mb-3">
                             <label for="formGroupExampleInput" class="form-label">Route</label>
                             <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Please input route" name="route">
                         </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="submit" class="btn btn-success">Save changes</button>
                 </div>
                   </form>
                 </div>
             </div>
         </div>
-
         <table id="userTable" class="table   table-bordered">
             <thead>
                 <tr>
