@@ -56,6 +56,21 @@
         </div>
     @endif
 
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" class="text-light">&times;</span>
+            </button>
+        </div>
+    @endif
+
+
+    {{-- @if ($errors->has('wrong'))
+        <div class="alert alert-danger mt-2">
+            {{ $errors->first('wrong') }}
+        </div>
+    @endif --}}
 
     <section class="border p-3 card">
 
@@ -93,7 +108,7 @@
                                     </ul>
                                 </div>
                             </div>
-                          
+
                             <div class="mb-3">
                                 <label class="form-label">Name</label>
                                 <input type="text" class="form-control" placeholder="Enter name" name="name" required>
@@ -103,7 +118,7 @@
                                 <label class="form-label">Email</label>
                                 <input type="email" class="form-control" placeholder="Enter email" name="email" required>
                             </div>
-                            
+
                             <div class="mb-3">
                                 <label class="form-label">Password</label>
                                 <input type="password" class="form-control" placeholder="Enter password" name="password" required>
@@ -166,8 +181,9 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editUser{{ $user->id }}">
                             Edit
                         </button>
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#changePassword{{ $user->id }}" >
-                            Change Password
+                         <!-- DELETE BUTTON -->
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteUser{{ $user->id }}">
+                            Delete
                         </button>
                     </td>
                 </tr>
@@ -189,7 +205,7 @@
                                 @method('PUT')
 
                                 <div class="modal-body">
-                                    
+
                                     <div class="mb-3">
                                         <label class="form-label">Name</label>
                                         <input type="text" class="form-control" name="name" value="{{ $user->name }}" required>
@@ -218,12 +234,44 @@
                                 </div>
 
                                 <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#changePassword{{ $user->id }}" >
+                                        Change Password
+                                    </button>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-success">Save changes</button>
                                 </div>
-
                             </form>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- DELETE USER MODAL -->
+                <div class="modal fade" id="deleteUser{{ $user->id }}" tabindex="-1" aria-labelledby="deleteUserLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+
+                            <div class="modal-header bg-danger text-white">
+                                <h5 class="modal-title">Delete User: {{ $user->name }}</h5>
+                                <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <div class="modal-body">
+                                <p class="mb-3 text-center">
+                                    ⚠️ This action cannot be undone.<br>
+                                    To continue, enter your <strong>current password</strong>.
+                                </p>
+                                <form action="{{ route('user.delete', $user->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <div class="form-group">
+                                        <label>Enter your password</label>
+                                        <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-danger btn-block">Confirm Delete</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -276,15 +324,10 @@
                     </div>
                 </div>
                 {{-- change Password Modal part end --}}
-
                 @endforeach
-
             </tbody>
-
         </table>
-
     </section>
-
 @stop
 
 @section('js')

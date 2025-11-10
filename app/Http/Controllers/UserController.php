@@ -22,22 +22,20 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
 
-            // STRONG PASSWORD RULES:
             'password' => [
                 'required',
                 'confirmed',
                 'min:8',
-                'regex:/[A-Z]/',      // uppercase
-                'regex:/[a-z]/',      // lowercase
-                'regex:/[0-9]/',      // number
-                'regex:/[@$!%*#?&]/', // special character
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/',
+                'regex:/[0-9]/',
+                'regex:/[@$!%*#?&]/',
             ],
-            
+
             'role' => 'required|string',
             'status' => 'required|in:active,inactive'
         ], [
 
-            // CUSTOM ERROR MESSAGES:
             'password.confirmed' => 'Password confirmation does not match.',
             'password.min' => 'Password must be at least 8 characters long.',
             'password.regex' => 'Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character (@$!%*#?&).',
@@ -55,22 +53,20 @@ class UserController extends Controller
         return redirect()->route('menu.user')->with('success', 'User created successfully!');
     }
 
-
     public function changePassword(Request $request, $id)
     {
 
        $request->validate([
             'currentPassword' => 'required',
 
-            // STRONG PASSWORD RULE
             'newPassword' => [
                 'required',
                 'min:8',
                 'same:confirmPassword',
-                'regex:/[A-Z]/',      // at least 1 uppercase
-                'regex:/[a-z]/',      // at least 1 lowercase
-                'regex:/[0-9]/',      // at least 1 number
-                'regex:/[@$!%*#?&]/', // at least 1 special character
+                'regex:/[A-Z]/',
+                'regex:/[a-z]/',
+                'regex:/[0-9]/',
+                'regex:/[@$!%*#?&]/',
             ],
         ], [
 
@@ -110,5 +106,28 @@ class UserController extends Controller
 
         return redirect()->route('menu.user')->with('success', 'User updated successfully!');
     }
-    
+
+    public function userDelete(Request $request, $id)
+    {
+        $request->validate([
+            'password' => ['required']
+        ]);
+
+        $loggedUser = auth()->user();
+
+        if (!Hash::check($request->password, $loggedUser->password)) {
+            return back()->with('error', 'Incorrect password! Cannot delete user.');
+        }
+
+        if ($loggedUser->id == $id) {
+            return back()->with('error', 'You cannot delete your own account.');
+        }
+
+        User::findOrFail($id)->delete();
+
+        return redirect()->route('menu.user')->with('success', 'User deleted successfully!');
+    }
+
 }
+
+
