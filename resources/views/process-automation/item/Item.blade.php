@@ -167,7 +167,7 @@
                         aria-labelledby="editModalLabel{{ $collection->id }}" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
-                                
+
                                 <form action="{{ route('item.update', $collection->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')

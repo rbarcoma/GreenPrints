@@ -7,8 +7,26 @@
 @stop
 
 @section('content')
-<section class="border p-3 card">
 
+@if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" class="text-light">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" class="text-light">&times;</span>
+            </button>
+        </div>
+@endif
+
+<section class="border p-3 card">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0">Item List</h4>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModal">
@@ -71,11 +89,9 @@
                         <td>
                             <div class="d-flex">
                                 <button class="btn btn-sm btn-primary me-1 mr-2" data-toggle="modal" data-target="#editModal{{ $category->id }}">Edit</button>
-                                <form action="{{ route('item_category.destroy', $category->id) }}" method="POST" onsubmit="return confirm('Are you sure to delete this category?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                </form>
+                                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteCategory{{ $category->id }}">
+                                    Delete
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -114,6 +130,38 @@
                                         <button type="submit" class="btn btn-success">Save Changes</button>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- DELETE ITEM CATEGORY MODAL -->
+                    <div class="modal fade" id="deleteCategory{{ $category->id }}" tabindex="-1" aria-labelledby="deleteCategoryLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title">Delete Category: {{ $category->name }}</h5>
+                                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p class="mb-3 text-center">
+                                        ⚠️ This action cannot be undone.<br>
+                                        To continue, enter your <strong>current password</strong>.
+                                    </p>
+
+                                    <form action="{{ route('item_category.destroy', $category->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <div class="form-group">
+                                            <label>Enter your password</label>
+                                            <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-danger btn-block">Confirm Delete</button>
+                                    </form>
+                                </div>
+
                             </div>
                         </div>
                     </div>

@@ -11,7 +11,8 @@ class StockModel extends Model
 
     protected $table = 'stocks';
 
-    protected $fillable = ['item_id', 'type', 'quantity', 'remarks', 'user_id'];
+    protected $fillable = ['item_id', 'type', 'quantity', 'remarks', 'user_id', 'date'];
+
 
     public function item()
     {

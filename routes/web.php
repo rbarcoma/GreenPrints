@@ -9,6 +9,7 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ItemInventoryController;
 use App\Http\Controllers\ChangePasswordController;
 use Illuminate\Support\Facades\Redirect;
 
@@ -35,15 +36,15 @@ Route::middleware(['auth', 'checkStatus'])->group(function () {
 
     Route::controller(MenuController::class)->middleware('auth')->group(function () {
         Route::get('/menu', 'index')->name('menu');
-        route::post('/menu', 'createMenu')->name('createMenu');
-        route::put('/menu/{id}', 'updateMenu')->name('menu.update');
-        Route::delete('/menu/{id}', 'destroy')->name('menu.destroy');
+        Route::post('/menu', 'createMenu')->name('createMenu');
+        Route::put('/menu/{id}', 'updateMenu')->name('menu.update');
+        Route::delete('menu/{id}', 'MenuDelete')->name('menu.delete');
 
         // Menu Header part
         Route::get('/menu-header', 'menuHeaderIndex')->name('menu-header');
         Route::post('/menu-header', 'menuHeaderCreate')->name('menu-header.create');
         Route::put('/menu-header/{id}', 'menuHeaderUpdate')->name('menu-header.update');
-        Route::delete('/menu-header/{id}', 'destroyMenuHeader')->name('menu-header.destroy');
+        Route::delete('/menu-header/{id}', 'MenuHeaderDelete')->name('menu-header.delete');
     });
 
     Route::controller(UserController::class)->group(function () {
@@ -82,8 +83,27 @@ Route::middleware(['auth', 'checkStatus'])->group(function () {
 
 
     Route::controller(StockController::class)->middleware('auth')->group(function () {
+
         Route::get('/stock', 'index')->name('stock.index');
         Route::post('/stock', 'StockIn')->name('stock.stockIn');
+
+        // STOCK LIST
+        Route::get('/stock/export/list/pdf', 'exportStockListPDF')->name('stock.export.list.pdf');
+        Route::get('/stock/export/list/excel', 'exportStockListExcel')->name('stock.export.list.excel');
+        // STOCK IN
+        Route::get('/stock/export/in/pdf', 'exportStockInPDF')->name('stock.export.in.pdf');
+        Route::get('/stock/export/in/excel', 'exportStockInExcel')->name('stock.export.in.excel');
+
+        // STOCK OUT
+        Route::get('/stock/export/out/pdf', 'exportStockOutPDF')->name('stock.export.out.pdf');
+        Route::get('/stock/export/out/excel', 'exportStockOutExcel')->name('stock.export.out.excel');
+
     });
+
+
+
+    // Route::controller(IteminventoryController::class)->middleware('auth')->group(function () {
+    //     Route::get('/item-inventory', 'index')->name('itemIventory.index');
+    // });
 
 });

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\MenuHeaderModel;
 use App\Models\MenuModel;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
@@ -65,16 +67,22 @@ class MenuController extends Controller
         return redirect()->route('menu');
     }
 
-    public function destroy($id)
+    public function MenuDelete(Request $request, $id)
     {
-        $itemCategory = MenuModel::findOrFail($id);
-        $itemCategory->delete();
+        $request->validate([
+            'password' => ['required']
+        ]);
 
-        return redirect()->route('menu');
+        $loggedUser = auth()->user();
 
+        if (!Hash::check($request->password, $loggedUser->password)) {
+            return back()->with('error', 'Incorrect password! Cannot delete user.');
+        }
+
+        MenuModel::findOrFail($id)->delete();
+
+        return redirect()->route('menu')->with('success', 'User deleted successfully!');
     }
-
-
 
     // Menu Header part start
 
@@ -126,12 +134,21 @@ class MenuController extends Controller
         return redirect()->route('menu-header')->with('success', 'Menu Header updated successfully!');
     }
 
-    public function destroyMenuHeader($id)
+    public function MenuHeaderDelete(Request $request, $id)
     {
-        $menuHeader = menuHeaderModel::findOrFail($id);
-        $menuHeader->delete();
+        $request->validate([
+            'password' => ['required']
+        ]);
 
-        return redirect()->route('menu.role');
+        $loggedUser = auth()->user();
+
+        if (!Hash::check($request->password, $loggedUser->password)) {
+            return back()->with('error', 'Incorrect password! Cannot delete user.');
+        }
+
+        MenuHeaderModel::findOrFail($id)->delete();
+
+        return redirect()->route('menu-header')->with('success', 'User deleted successfully!');
     }
 
 }

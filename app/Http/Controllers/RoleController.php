@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\MenuModel;
 use App\Models\RoleModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
 
 class RoleController extends Controller
 {
@@ -24,7 +26,7 @@ class RoleController extends Controller
 
         $validated = $request->validate([
             'name'        => 'required|string|max:255',
-            'slug'        => 'nullable|string',
+            'slug'        => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'menus'       => 'array|nullable',
         ]);
@@ -64,12 +66,22 @@ class RoleController extends Controller
         return redirect()->route('menu.role');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $itemCategory = RoleModel::findOrFail($id);
-        $itemCategory->delete();
+        $request->validate([
+            'password' => ['required']
+        ]);
 
-        return redirect()->route('menu.role');
+        $loggedUser = auth()->user();
+
+        if (!Hash::check($request->password, $loggedUser->password)) {
+            return back()->with('error', 'Incorrect password! Cannot delete role.');
+        }
+
+        RoleModel::findOrFail($id)->delete();
+
+        return redirect()->route('menu.role')->with('success', 'Role deleted successfully!');
     }
+
 
 }

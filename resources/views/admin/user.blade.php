@@ -178,11 +178,11 @@
                     <td>{{ $user->role }}</td>
                     <td>{{ $user->status }}</td>
                     <td>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editUser{{ $user->id }}">
+                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#editUser{{ $user->id }}">
                             Edit
                         </button>
                          <!-- DELETE BUTTON -->
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteUser{{ $user->id }}">
+                        <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteUser{{ $user->id }}">
                             Delete
                         </button>
                     </td>

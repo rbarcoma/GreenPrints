@@ -50,13 +50,14 @@ class HomeController extends Controller
         }
             
         $stocks = StockModel::select(
-             DB::raw('DATE(created_at) as date'),
-                'type',
-                DB::raw('SUM(quantity) as total')
-            )
-            ->groupBy('date', 'type')
-            ->orderBy('date', 'asc')
-            ->get();
+            'date',
+            'type',
+            DB::raw('SUM(quantity) as total')
+        )
+        ->groupBy('date', 'type')
+        ->orderBy('date', 'asc')
+        ->get();
+
 
         $dates = $stocks->pluck('date')->unique()->values();
         $stockInData = [];

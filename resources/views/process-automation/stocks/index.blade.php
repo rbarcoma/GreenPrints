@@ -21,13 +21,26 @@
 
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#startCamera">Use Scanner</button>
         </div>
-
+    </div>
+    <div class="dropdown mb-3">   
+        <button class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
+            Export Stock List
+        </button>                   
+        <div class="dropdown-menu">
+            <a class="dropdown-item pdf" href="{{ route('stock.export.list.pdf', ['filter' => 'weekly']) }}">PDF Weekly</a>
+            <a class="dropdown-item pdf" href="{{ route('stock.export.list.pdf', ['filter' => 'monthly']) }}">PDF Monthly</a>
+            <a class="dropdown-item pdf" href="{{ route('stock.export.list.pdf', ['filter' => 'yearly']) }}">PDF Yearly</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item excel" href="{{ route('stock.export.list.excel', ['filter' => 'weekly']) }}">Excel Weekly</a>
+            <a class="dropdown-item excel" href="{{ route('stock.export.list.excel', ['filter' => 'monthly']) }}">Excel Monthly</a>
+            <a class="dropdown-item excel" href="{{ route('stock.export.list.excel', ['filter' => 'yearly']) }}">Excel Yearly</a>
+        </div>
     </div>
 
     {{-- Carmera in user start part --}}
     <div class="modal fade"  id="startCamera" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true" >
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="useCameraLabel">Camera Scanner</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -37,7 +50,6 @@
                 <div class="modal-body">
                     <button id="useCameraBtn" class="btn btn-success">Use Camera</button>
                     <button id="useScannerBtn" class="btn btn-primary">Use Scanner</button>
-                    <!-- ✅ stock type dropdown here -->
                     <div class="d-flex align-items-center mt-3">
                         <label class="mr-2 font-weight-bold">Type:</label>
                         <select id="stockType" class="form-control w-25">
@@ -57,6 +69,8 @@
                                 <th>Name</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
+                                <th>Remarks</th>
+                                <th>Date</th>
                                 <th style="width: 120px;">Action</th>
                             </tr>
                         </thead>
@@ -108,52 +122,8 @@
                         </div>
 
                          <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-group">Remarks</label>
-                            <textarea class="form-control" placeholder="Leave a remarks here" id="floatingTextarea" name="remarks"></textarea>
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Add</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-      <!-- Create Modal -->
-    <div class="modal fade" id="stockOutModal" tabindex="-1" role="dialog" aria-labelledby="stockOutModal" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="stockOutModalLabel">Stock In</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span>&times;</span>
-                    </button>
-                </div>
-
-                <form action="{{ route('stock.stockIn') }}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>Type</label>
-                            <input type="text" class="form-control" value="Stock Out" required name="type" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="formGroupExampleInput" class="form-group">Item Name</label>
-                              <select class="custom-select" id="inputGroupSelect01" name="item">
-                                @foreach ($items as $item)
-                                    <option value="{{ $item->id }}">{{ $item->item_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Item Quantity</label>
-                            <input type="number" class="form-control" placeholder="example: 10" required name="quantity">
+                            <label>Date</label>
+                            <input type="date" name="date" class="form-control" value="{{ date('Y-m-d') }}">
                         </div>
 
                          <div class="mb-3">
@@ -165,12 +135,90 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Save changes</button>
+                        <button type="submit" class="btn btn-success">Add Stock In</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+      <!-- Stock out Create Modal -->
+    <div class="modal fade" id="stockOutModal" tabindex="-1" role="dialog" aria-labelledby="stockOutModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content border-0 shadow-sm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="stockOutModalLabel">Stock Out</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <form action="{{ route('stock.stockIn') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Type</label>
+                            <input type="text" class="form-control" value="Stock Out" name="type" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Item Name</label>
+                            <select class="custom-select" id="inputGroupSelect01" name="item" required>
+                                @php
+                                    $stocks = \App\Models\StockModel::with('item')->get();
+                                    $inventory = $stocks->groupBy('item_id')->map(function ($group) {
+                                        $total = 0;
+                                        foreach ($group as $stock) {
+                                            $total += $stock->type === 'Stock In'
+                                                ? $stock->quantity
+                                                : -$stock->quantity;
+                                        }
+                                        return [
+                                            'item' => $group->first()->item,
+                                            'total_quantity' => $total,
+                                        ];
+                                    });
+                                    $availableForStockOut = collect($inventory)->filter(fn($data) => $data['total_quantity'] > 0);
+                                @endphp
+
+                                @forelse ($availableForStockOut as $data)
+                                    <option value="{{ $data['item']->id }}">
+                                        {{ $data['item']->item_name }} — (Available: {{ $data['total_quantity'] }})
+                                    </option>
+                                @empty
+                                    <option disabled>No items available for Stock Out</option>
+                                @endforelse
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Item Quantity</label>
+                            <input type="number" class="form-control" placeholder="example: 10" required name="quantity" min="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" name="date" class="form-control" value="{{ date('Y-m-d') }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Remarks</label>
+                            <textarea class="form-control" placeholder="Leave a remark here" name="remarks"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success"
+                            {{ $availableForStockOut->isEmpty() ? 'disabled' : '' }}>
+                            Add Stock Out
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     <table class="table-responsive">
             <table id="itemCategoryTable" class="table table-bordered table-striped">
@@ -192,14 +240,25 @@
      </table>
 
 
-
-
-
 </section>
 
 <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mt-4">
       <section class="card flex-fill border p-3" style="min-width: 48%;">
         <h5 class="text-center mb-3">Stock In Records</h5>
+        <div class="dropdown mb-3">
+            <button class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
+                Export Stock In
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item pdf" href="{{ route('stock.export.in.pdf', ['filter' => 'weekly']) }}">PDF Weekly</a>
+                <a class="dropdown-item pdf" href="{{ route('stock.export.in.pdf', ['filter' => 'monthly']) }}">PDF Monthly</a>
+                <a class="dropdown-item pdf" href="{{ route('stock.export.in.pdf', ['filter' => 'yearly']) }}">PDF Yearly</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item excel" href="{{ route('stock.export.in.excel', ['filter' => 'weekly']) }}">Excel Weekly</a>
+                <a class="dropdown-item excel" href="{{ route('stock.export.in.excel', ['filter' => 'monthly']) }}">Excel Monthly</a>
+                <a class="dropdown-item excel" href="{{ route('stock.export.in.excel', ['filter' => 'yearly']) }}">Excel Yearly</a>
+            </div>
+        </div>
         <div class="table-responsive">
             <table id="StockInTable" class="table table-bordered table-striped mb-0">
                    <thead class="thead-light">
@@ -209,6 +268,7 @@
                         <th>type</th>
                         <th>Quantity </th>
                         <th>remarks</th>
+                        <th>Date</th>
                         <th>Responsible User</th>
                     </tr>
                 </thead>
@@ -220,6 +280,7 @@
                         <td>{{ $in->type }}</td>
                         <td>{{ $in->quantity }}</td>
                         <td>{{ $in->remarks }}</td>
+                        <td>{{ \Carbon\Carbon::parse($in->date)->format('M d, Y') }}</td>
                         <td>{{ $in->user->name }}</td>
                      </tr>
                  @endforeach
@@ -231,6 +292,20 @@
 
     <section class="card flex-fill border p-3" style="min-width: 48%;">
         <h5 class="text-center mb-3">Stock Out Records</h5>
+        <div class="dropdown mb-3">
+            <button class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
+                Export Stock Out
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item pdf" href="{{ route('stock.export.out.pdf', ['filter' => 'weekly']) }}">PDF Weekly</a>
+                <a class="dropdown-item pdf" href="{{ route('stock.export.out.pdf', ['filter' => 'monthly']) }}">PDF Monthly</a>
+                <a class="dropdown-item pdf" href="{{ route('stock.export.out.pdf', ['filter' => 'yearly']) }}">PDF Yearly</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item excel" href="{{ route('stock.export.out.excel', ['filter' => 'weekly']) }}">Excel Weekly</a>
+                <a class="dropdown-item excel" href="{{ route('stock.export.out.excel', ['filter' => 'monthly']) }}">Excel Monthly</a>
+                <a class="dropdown-item excel" href="{{ route('stock.export.out.excel', ['filter' => 'yearly']) }}">Excel Yearly</a>
+            </div>
+        </div>
         <div class="table-responsive">
             <table id="StockOutTable" class="table table-bordered table-striped mb-0">
                    <thead class="thead-light">
@@ -240,6 +315,7 @@
                         <th>type</th>
                         <th>Quantity </th>
                         <th>remarks</th>
+                        <th>Date</th>
                         <th>Responsible User</th>
                     </tr>
                 </thead>
@@ -251,6 +327,7 @@
                         <td>{{ $out->type }}</td>
                         <td>{{ $out->quantity }}</td>
                         <td>{{ $out->remarks }}</td>
+                        <td>{{ \Carbon\Carbon::parse($out->date)->format('M d, Y') }}</td>
                         <td>{{ $out->user->name }}</td>
                      </tr>
                  @endforeach
@@ -263,7 +340,7 @@
 
 @stop
 
-@section('js')
+{{-- @section('js')
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -445,9 +522,20 @@ $(function () {
 </script>
 
 
-@stop
+@stop --}}
 
-{{--
+
+
+
+
+
+
+
+
+
+
+
+
 
 @section('js')
 
@@ -535,26 +623,43 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`/get-item/${barcode}`)
             .then(res => res.json())
             .then(data => {
-
                 if (data && data.barcode) {
+                    const existingRow = Array.from(itemList.children).find(row =>
+                        row.cells[0].textContent.trim() === data.barcode.trim()
+                    );
 
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${data.barcode}</td>
-                        <td contenteditable="false">${data.item_name}</td>
-                        <td contenteditable="false">${data.price}</td>
-                        <td contenteditable="false" class="qty-cell">0</td> <!-- ✅ Quantity default = 0 -->
-                        <td>
-                            <button class="btn btn-sm btn-warning edit-btn">Edit</button>
-                            <button class="btn btn-sm btn-danger delete-btn">Delete</button>
-                        </td>
-                    `;
-                    itemList.appendChild(row);
+                    if (existingRow) {
+                        const qtyCell = existingRow.querySelector('.qty-cell');
+                        let currentQty = parseInt(qtyCell.textContent || 0);
+                        qtyCell.textContent = currentQty + 1;
 
+                        qtyCell.style.backgroundColor = "#d4edda";
+                        setTimeout(() => qtyCell.style.backgroundColor = "", 500);
+                    } else {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${data.barcode}</td>
+                            <td contenteditable="false">${data.item_name}</td>
+                            <td contenteditable="false">${data.price}</td>
+                            <td contenteditable="false" class="qty-cell">1</td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm remarks-input" placeholder="Enter remarks">
+                            </td>
+                            <td>
+                                <input type="date" class="form-control form-control-sm date-input"
+                                value="${new Date().toISOString().split('T')[0]}">
+                            </td>
+                            <td>
+                                <button class="btn btn-sm btn-warning edit-btn">Edit</button>
+                                <button class="btn btn-sm btn-danger delete-btn">Delete</button>
+                            </td>
+                        `;
+                        itemList.appendChild(row);
+
+                    }
                 } else {
-                    alert('❌ Item not found: ' + barcode);
+                    alert('Item not found: ' + barcode);
                 }
-
             })
             .catch(err => console.error("Fetch error:", err));
     }
@@ -606,7 +711,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: row.cells[1].textContent,
                 price: row.cells[2].textContent,
                 qty: row.cells[3].textContent,
-                type: stockType.value // stock in / out
+                remarks: row.querySelector('.remarks-input')?.value || '',
+                date: row.querySelector('.date-input')?.value || '',
+                type: stockType.value
             });
         });
 
@@ -630,8 +737,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
+$(function () {
+    $('#StockInTable').DataTable({
+        responsive: true,
+        autoWidth: true,
+        pageLength: 5,
+        lengthMenu: [ [5, 10, 25, 50, 100], [5, 10, 25, 50, 100] ],
+        language: {
+            search: "Search:",
+            lengthMenu: "Show _MENU_ entries",
+        }
+    });
+});
+
+$(function () {
+    $('#itemCategoryTable').DataTable({
+        responsive: true,
+        autoWidth: true,
+        pageLength: 10,
+        language: {
+            search: "Search:",
+            lengthMenu: "Show _MENU_ entries",
+        }
+    });
+});
+
+$(function () {
+    $('#StockOutTable').DataTable({
+        responsive: true,
+        autoWidth: true,
+        pageLength: 5,
+        lengthMenu: [ [5, 10, 25, 50, 100], [5, 10, 25, 50, 100] ],
+        language: {
+            search: "Search:",
+            lengthMenu: "Show _MENU_ entries",
+        }
+    });
+});
+
 </script>
-@stop --}}
+@stop
 
 @section('css')
 <style>
@@ -641,6 +786,21 @@ document.addEventListener('DOMContentLoaded', function() {
         max-height: 200px !important;
         object-fit: contain !important;
     }
+</style>
+
+<style>
+
+.dropdown-menu .dropdown-item.pdf:hover,
+.dropdown-menu .dropdown-item.pdf:focus {
+    background-color: #dc3545 !important; 
+    color: #fff !important;
+}
+
+.dropdown-menu .dropdown-item.excel:hover,
+.dropdown-menu .dropdown-item.excel:focus {
+    background-color: #198754 !important;
+    color: #fff !important;
+}
 </style>
 
 @endsection

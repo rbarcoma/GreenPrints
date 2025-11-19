@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ItemCategoryModel;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ItemCategoryController extends Controller
 {
@@ -49,12 +50,22 @@ class ItemCategoryController extends Controller
 
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        $itemCategory = ItemCategoryModel::findOrFail($id);
-        $itemCategory->delete();
+        $request->validate([
+            'password' => ['required']
+        ]);
 
-        return redirect()->route('item_category.index');
+        $loggedUser = auth()->user();
+
+        if (!Hash::check($request->password, $loggedUser->password)) {
+            return back()->with('error', 'Incorrect password! Cannot delete category.');
+        }
+
+        ItemCategoryModel::findOrFail($id)->delete();
+
+        return redirect()->route('item_category.index')->with('success', 'Category deleted successfully!');
     }
+
 
 }
