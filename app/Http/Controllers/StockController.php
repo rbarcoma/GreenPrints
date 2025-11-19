@@ -16,7 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class StockController extends Controller
 {
-   public function index()
+    public function index()
     {
         $items = ItemModel::where('status', 'active')->get();
         $stocks = StockModel::with('item')->get();
@@ -90,6 +90,54 @@ class StockController extends Controller
         return redirect()->route('stock.index');
     }
 
+    public function ScannerInsertion(Request $request)
+    {
+
+
+        $user = Auth::user();
+        $items = $request->items; // array of items
+
+        foreach ($items as $item) {
+
+            $itemId = $item['item_id'];
+            $quantity = $item['qty'];
+            $type = $item['type'];
+            $remarks = $item['remarks'] ?? null;
+            $date = $item['date'] ?? now()->toDateString();
+
+            $itemModel = ItemModel::find($itemId);
+
+            if (!$itemModel || $itemModel->status !== 'active') {
+                continue;
+            }
+
+            if ($type === 'Stock Out') {
+
+                $currentStock = StockModel::where('item_id', $itemId)
+                    ->get()
+                    ->reduce(function ($total, $record) {
+                        return $total + ($record->type === 'Stock In' ? $record->quantity : -$record->quantity);
+                    }, 0);
+
+                if ($quantity > $currentStock) {
+                    continue;
+                }
+            }
+
+            StockModel::create([
+                'item_id'  => $itemId,
+                'type'     => $type,
+                'quantity' => $quantity,
+                'remarks'  => $remarks,
+                'user_id'  => $user->id,
+                'date'     => $date,
+            ]);
+        }
+
+        return redirect()->route('stock.index');
+    }
+
+
     // stock list pdf
     public function exportStockListPDF(Request $request)
     {
@@ -138,7 +186,7 @@ class StockController extends Controller
             $dateFrom = Carbon::now()->startOfYear();
         }
 
-        $stockIn = StockModel::with(['item','user'])
+        $stockIn = StockModel::with(['item', 'user'])
             ->where('type', 'Stock In')
             ->whereDate('date', '>=', $dateFrom)
             ->get();
@@ -150,7 +198,7 @@ class StockController extends Controller
     }
 
     // stock out records pdf
-   public function exportStockOutPDF(Request $request)
+    public function exportStockOutPDF(Request $request)
     {
         $filter = $request->get('filter', 'weekly');
 
@@ -162,7 +210,7 @@ class StockController extends Controller
             $dateFrom = Carbon::now()->startOfYear();
         }
 
-        $stockOut = StockModel::with(['item','user'])
+        $stockOut = StockModel::with(['item', 'user'])
             ->where('type', 'Stock Out')
             ->whereDate('date', '>=', $dateFrom)
             ->get();
@@ -194,5 +242,4 @@ class StockController extends Controller
         $filter = $request->filter ?? 'weekly';
         return Excel::download(new StockOutExport($filter), "StockOut-$filter.xlsx");
     }
-
 }

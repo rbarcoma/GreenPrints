@@ -18,7 +18,7 @@ class ItemController extends Controller
         $category = ItemCategoryModel::all();
         $item_collection = ItemModel::all();
 
-       return view('process-automation.item.Item', compact('category','item_collection'));
+        return view('process-automation.item.Item', compact('category', 'item_collection'));
     }
 
 
@@ -73,8 +73,8 @@ class ItemController extends Controller
     public function getItem($barcode)
     {
         $barcodeRecord = ItemBarcode::where('barcode_value', $barcode)
-        ->with('item') // load related item
-        ->first();
+            ->with('item') // load related item
+            ->first();
 
         if (!$barcodeRecord || !$barcodeRecord->item) {
             return response()->json(['error' => 'Item not found'], 404);
@@ -84,6 +84,7 @@ class ItemController extends Controller
         $item = $barcodeRecord->item;
 
         return response()->json([
+            'item_id' => $item->id,
             'barcode' => $barcodeRecord->barcode_value,
             'item_name' => $item->item_name,
             'price' => $item->item_price,
@@ -127,5 +128,4 @@ class ItemController extends Controller
         }
         return redirect()->route('item.index')->with('success', 'Item updated successfully');
     }
-
 }

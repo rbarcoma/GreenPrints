@@ -58,6 +58,8 @@ class HomeController extends Controller
         ->orderBy('date', 'asc')
         ->get();
 
+        
+
 
         $dates = $stocks->pluck('date')->unique()->values();
         $stockInData = [];

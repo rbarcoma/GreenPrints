@@ -86,6 +86,7 @@ Route::middleware(['auth', 'checkStatus'])->group(function () {
 
         Route::get('/stock', 'index')->name('stock.index');
         Route::post('/stock', 'StockIn')->name('stock.stockIn');
+        Route::post('/scannerStock', 'ScannerInsertion')->name('scannerInsert');
 
         // STOCK LIST
         Route::get('/stock/export/list/pdf', 'exportStockListPDF')->name('stock.export.list.pdf');

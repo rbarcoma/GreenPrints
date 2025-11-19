@@ -53,8 +53,8 @@
                     <div class="d-flex align-items-center mt-3">
                         <label class="mr-2 font-weight-bold">Type:</label>
                         <select id="stockType" class="form-control w-25">
-                            <option value="in">Stock In</option>
-                            <option value="out">Stock Out</option>
+                            <option value="Stock In">Stock In</option>
+                            <option value="Stock Out">Stock Out</option>
                         </select>
                     </div>
                     <input type="text" id="barcodeInput" class="form-control mt-2" placeholder="Scan barcode..." autofocus>
@@ -80,7 +80,7 @@
 
                 <div class="modal-footer">
                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                     <button type="submit" class="btn btn-success">Save changes</button>
+                     <button type="submit" class="btn btn-success" id="saveChangesBtn">Save changes</button>
                 </div>
             </div>
         </div>
@@ -340,206 +340,10 @@
 
 @stop
 
-{{-- @section('js')
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const barcodeInput = document.getElementById('barcodeInput');
-    const readerDiv = document.getElementById('reader');
-    const itemList = document.querySelector('#item-list tbody');
-    const useCameraBtn = document.getElementById('useCameraBtn');
-    const useScannerBtn = document.getElementById('useScannerBtn');
-    let cameraActive = false;
-
-    // --- SWITCH TO BARCODE SCANNER MODE ---
-    useScannerBtn.addEventListener('click', () => {
-        if (cameraActive) stopCamera();
-        readerDiv.style.display = 'none';
-        barcodeInput.style.display = 'block';
-        barcodeInput.focus();
-    });
-
-    // --- SWITCH TO CAMERA MODE ---
-    useCameraBtn.addEventListener('click', () => {
-        barcodeInput.style.display = 'none';
-        readerDiv.style.display = 'block';
-        startCameraScanner();
-    });
-
-    // --- HARDWARE SCANNER MODE ---
-    barcodeInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            const code = barcodeInput.value.trim();
-            if (code) handleScannedCode(code);
-            barcodeInput.value = '';
-        }
-    });
-
-    // --- CAMERA SCANNER MODE (QuaggaJS) ---
-    function startCameraScanner() {
-        if (cameraActive) return;
-
-        Quagga.init({
-            inputStream: {
-                name: "Live",
-                type: "LiveStream",
-                target: document.querySelector('#reader'),
-                constrainsts: {
-                    width: 320,
-                    height: 240,
-                    facingMode: "environment"
-                }
-            },
-            locator: {
-                patchSize: "medium", // or "small" for faster detection
-                halfSample: true
-            },
-            decoder: { readers: ["code_128_reader", "ean_reader", "ean_8_reader"] },
-            locate: true
-        }, function(err) {
-            if (err) { console.error("Camera init error:", err); return; }
-            Quagga.start();
-            cameraActive = true;
-            console.log("Camera ready.");
-        });
-
-        Quagga.onDetected(data => {
-            const barcode = data.codeResult.code;
-            Quagga.pause();
-            handleScannedCode(barcode);
-            setTimeout(() => Quagga.start(), 1500);
-        });
-    }
-
-    function stopCamera() {
-        if (cameraActive) {
-            Quagga.stop();
-            cameraActive = false;
-        }
-    }
-
-    // --- MAIN HANDLER ---
-    function handleScannedCode(barcode) {
-        console.log("Scanned:", barcode);
-        fetch(`/get-item/${barcode}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data && data.barcode) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${data.barcode}</td>
-                        <td contenteditable="false">${data.item_name}</td>
-                        <td contenteditable="false">${data.price}</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning edit-btn">Edit</button>
-                            <button class="btn btn-sm btn-danger delete-btn">Delete</button>
-                        </td>
-                    `;
-                    itemList.appendChild(row);
-                } else {
-                    alert('❌ Item not found: ' + barcode);
-                }
-            })
-            .catch(err => console.error("Fetch error:", err));
-    }
-
-    // --- ACTION BUTTONS (Edit & Delete) ---
-    itemList.addEventListener('click', function(e) {
-        const row = e.target.closest('tr');
-        if (e.target.classList.contains('delete-btn')) {
-            row.remove();
-        }
-        if (e.target.classList.contains('edit-btn')) {
-            toggleEditRow(row);
-        }
-    });
-
-    function toggleEditRow(row) {
-        const nameCell = row.cells[1];
-        const priceCell = row.cells[2];
-        const editBtn = row.querySelector('.edit-btn');
-
-        if (editBtn.textContent === "Edit") {
-            nameCell.contentEditable = "true";
-            priceCell.contentEditable = "true";
-            nameCell.focus();
-            editBtn.textContent = "Save";
-            editBtn.classList.replace('btn-warning', 'btn-success');
-        } else {
-            nameCell.contentEditable = "false";
-            priceCell.contentEditable = "false";
-            editBtn.textContent = "Edit";
-            editBtn.classList.replace('btn-success', 'btn-warning');
-
-            // You can later send update to backend here
-            console.log("Saved:", {
-                barcode: row.cells[0].textContent,
-                name: nameCell.textContent,
-                price: priceCell.textContent
-            });
-        }
-    }
-});
-
-
-
-$(function () {
-    $('#StockInTable').DataTable({
-        responsive: true,
-        autoWidth: true,
-        pageLength: 10,
-        language: {
-            search: "Search:",
-            lengthMenu: "Show _MENU_ entries",
-        }
-    });
-});
-
-$(function () {
-    $('#itemCategoryTable').DataTable({
-        responsive: true,
-        autoWidth: true,
-        pageLength: 10,
-        language: {
-            search: "Search:",
-            lengthMenu: "Show _MENU_ entries",
-        }
-    });
-});
-
-$(function () {
-    $('#StockOutTable').DataTable({
-        responsive: true,
-        autoWidth: true,
-        pageLength: 10,
-        language: {
-            search: "Search:",
-            lengthMenu: "Show _MENU_ entries",
-        }
-    });
-});
-</script>
-
-
-@stop --}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @section('js')
 
 <script>
+
 document.addEventListener('DOMContentLoaded', function() {
 
     const barcodeInput = document.getElementById('barcodeInput');
@@ -629,19 +433,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     );
 
                     if (existingRow) {
-                        const qtyCell = existingRow.querySelector('.qty-cell');
-                        let currentQty = parseInt(qtyCell.textContent || 0);
-                        qtyCell.textContent = currentQty + 1;
+                        const qtyInput = existingRow.querySelector('.qty-cell input');
+                        let currentQty = parseInt(qtyInput.value) || 0;
+                        qtyInput.value = currentQty + 1;
 
                         qtyCell.style.backgroundColor = "#d4edda";
                         setTimeout(() => qtyCell.style.backgroundColor = "", 500);
                     } else {
                         const row = document.createElement('tr');
+                          row.dataset.itemId = data.item_id;
                         row.innerHTML = `
                             <td>${data.barcode}</td>
                             <td contenteditable="false">${data.item_name}</td>
                             <td contenteditable="false">${data.price}</td>
-                            <td contenteditable="false" class="qty-cell">1</td>
+                            <td contenteditable="false" class="qty-cell">
+                                <input type="text" class="form-control form-control-sm qty-input" value="1">
+                            </td>
                             <td>
                                 <input type="text" class="form-control form-control-sm remarks-input" placeholder="Enter remarks">
                             </td>
@@ -700,39 +507,59 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+
+
     // SAVE CHANGES BUTTON HANDLER
     document.getElementById('saveChangesBtn').addEventListener('click', function() {
-
+  
         const items = [];
 
         itemList.querySelectorAll('tr').forEach(row => {
             items.push({
-                barcode: row.cells[0].textContent,
-                name: row.cells[1].textContent,
-                price: row.cells[2].textContent,
-                qty: row.cells[3].textContent,
-                remarks: row.querySelector('.remarks-input')?.value || '',
+                item_id: row.dataset.itemId,   
+                type: stockType.value,
+                qty: row.querySelector('.qty-input')?.value || 1,
                 date: row.querySelector('.date-input')?.value || '',
-                type: stockType.value
+                remarks: row.querySelector('.remarks-input')?.value || '',
             });
         });
 
         console.log("Saving...", items);
 
-        fetch(`/stocks/save`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        // use AJAX
+
+        $.ajax({
+            type: "POST",
+            url: "{{ route('scannerInsert') }}",
+            data: {
+                _token: "{{ csrf_token() }}",
+                items: items
             },
-            body: JSON.stringify({ items: items })
-        })
-        .then(res => res.json())
-        .then(response => {
-            alert("Saved successfully!");
-            location.reload();
-        })
-        .catch(err => console.error(err));
+            success: function (response) {
+                alert("Stocks saved successfully!");
+                $('#item-list tbody').empty();
+                $('#startCamera').modal('hide');
+            },
+            error: function (xhr) {
+                console.log(xhr.responseText);
+                alert("Error saving!");
+            }
+        });
+
+        // fetch(`/scannerStock`, {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        //     },
+        //     body: JSON.stringify({ items: items })
+        // })
+        // .then(res => res.json())
+        // .then(response => {
+        //     alert("Saved successfully!");
+        //     location.reload();
+        // })
+        // .catch(err => console.error(err));
     });
 
 });
