@@ -15,9 +15,16 @@ class ItemModel extends Model
 
     public function category()
     {
-        return $this->belongsTo(ItemCategoryModel::class, 'item_category', 'id');
+        return $this->belongsTo(ItemCategoryModel::class, 'item_category', 'id')->withDefault([
+            'category_name' => 'No Category',
+            'category_desc' => ''
+        ]);
     }
 
+    public function stocks()
+    {
+        return $this->hasMany(StockModel::class, 'item_id');
+    }
 
     public function barcode()
     {

@@ -30,25 +30,30 @@ class HomeController extends Controller
      */
     public function index()
     {
-
-
        $data = StockModel::with('item:id,item_name')
                 ->select('item_id', 'type', DB::raw('SUM(quantity) as total'))
                 ->groupBy('item_id', 'type')
                 ->orderBy('item_id')
                 ->get();
-       $items = $data->pluck('item.item_name')->unique()->values(); 
-       $stockIn = [];
-       $stockOut = [];
-       foreach ($items as $itemName) {
-            $stockIn[] = $data->where('item.item_name', $itemName)
-                            ->where('type', 'Stock In')
-                            ->sum('total');
-            $stockOut[] = $data->where('item.item_name', $itemName)
-                                ->where('type', 'stock Out')
-                                ->sum('total');
+       $items = ItemModel::pluck('item_name'); // ALWAYS get all items
+
+        $stockIn = [];
+        $stockOut = [];
+
+        foreach ($items as $itemName) {
+            $stockIn[] = StockModel::whereHas('item', function($q) use ($itemName) {
+                                $q->where('item_name', $itemName);
+                            })
+                            ->where('type', 'LIKE', '%In%')
+                            ->sum('quantity');
+
+            $stockOut[] = StockModel::whereHas('item', function($q) use ($itemName) {
+                                $q->where('item_name', $itemName);
+                            })
+                            ->where('type', 'LIKE', '%Out%')
+                            ->sum('quantity');
         }
-            
+
         $stocks = StockModel::select(
             'date',
             'type',
@@ -58,7 +63,7 @@ class HomeController extends Controller
         ->orderBy('date', 'asc')
         ->get();
 
-        
+
 
 
         $dates = $stocks->pluck('date')->unique()->values();

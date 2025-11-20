@@ -82,7 +82,7 @@
         </div>
 
         {{-- Number of Roles --}}
-        <div class="col-md-3 mb-3">
+        {{-- <div class="col-md-3 mb-3">
             <div class="card h-100">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <h5 class="card-title">Number of Role</h5>
@@ -92,7 +92,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         {{-- Number of Menus --}}
         <div class="col-md-3 mb-3">

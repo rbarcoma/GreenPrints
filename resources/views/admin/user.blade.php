@@ -19,7 +19,7 @@
         </div>
     @endif --}}
 
-    @if($errors->any())
+    {{-- @if($errors->any())
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             @foreach ($errors->all() as $error)
                 {{ $error }} <br>
@@ -28,7 +28,7 @@
                 </button>
             @endforeach
         </div>
-    @endif
+    @endif --}}
 
 
     {{-- toast message --}}

@@ -116,7 +116,7 @@
                         <td>{{ $collection->id }}</td>
                         <td>{{ $collection->item_name }}</td>
                         <td>{{ $collection->item_desc }}</td>
-                        <td>{{ $collection->category->category_name }}</td>
+                        <td>{{ $collection->category->category_name ?? 'No Category' }}</td>
 
                         <td>{{ number_format($collection->item_price, 2) }}</td>
                         <td style="text-align: center; vertical-align: middle;">
@@ -180,10 +180,7 @@
                                             <span>&times;</span>
                                         </button>
                                     </div>
-
                                     <div class="modal-body">
-
-                                        {{-- CURRENT IMAGE PREVIEW --}}
                                         <div class="text-center mb-3">
                                             <img src="{{ $collection->image ? asset($collection->image->image_path) : asset('default_image/default_image.jpg') }}"
                                                 width="120"
@@ -193,21 +190,15 @@
                                                 {{ $collection->image->image_name ?? 'No image available' }}
                                             </div>
                                         </div>
-
-                                        {{-- UPLOAD NEW IMAGE --}}
                                         <div class="form-group">
                                             <label>Change Image</label>
                                             <input type="file" name="new_image" class="form-control-file" accept="image/*">
                                             <small class="text-muted">Leave blank if you don't want to change the image.</small>
                                         </div>
-
-                                        {{-- DESCRIPTION --}}
                                         <div class="form-group">
                                             <label>Description</label>
                                             <textarea name="description" class="form-control" rows="4">{{ $collection->item_desc }}</textarea>
                                         </div>
-
-                                        {{-- STATUS --}}
                                         <div class="form-group">
                                             <label>Status</label>
                                             <select name="status" class="form-control">
@@ -215,14 +206,11 @@
                                                 <option value="inactive" {{ $collection->status == 'inactive' ? 'selected' : '' }}>Inactive</option>
                                             </select>
                                         </div>
-
                                     </div>
-
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-success">Save Changes</button>
                                     </div>
-
                                 </form>
                             </div>
                         </div>
@@ -285,7 +273,8 @@
                                           <div class="form-group">
                                             <label>Category Name</label>
                                             <input type="text" name="name" class="form-control"
-                                                value="{{ $collection->category->category_name }}" disabled>
+                                                value="{{ $collection->category->category_name ?? 'No Category' }}" disabled>
+
                                         </div>
 
                                         <div class="form-group">

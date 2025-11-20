@@ -8,6 +8,7 @@ use App\Models\ItemImage;
 use App\Models\ItemModel;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 
 class ItemController extends Controller
@@ -128,4 +129,5 @@ class ItemController extends Controller
         }
         return redirect()->route('item.index')->with('success', 'Item updated successfully');
     }
+
 }

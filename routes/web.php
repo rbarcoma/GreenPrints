@@ -73,7 +73,6 @@ Route::middleware(['auth', 'checkStatus'])->group(function () {
         Route::get('/get-item/{barcode}', 'getItem')->name('item.scan');
     });
 
-
     Route::controller(ItemCategoryController::class)->middleware('auth')->group(function () {
         Route::get('/item_category', 'index')->name('item_category.index');
         Route::post('/item_category', 'create_category')->name('item_category.create');
@@ -100,11 +99,5 @@ Route::middleware(['auth', 'checkStatus'])->group(function () {
         Route::get('/stock/export/out/excel', 'exportStockOutExcel')->name('stock.export.out.excel');
 
     });
-
-
-
-    // Route::controller(IteminventoryController::class)->middleware('auth')->group(function () {
-    //     Route::get('/item-inventory', 'index')->name('itemIventory.index');
-    // });
 
 });

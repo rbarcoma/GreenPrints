@@ -22,10 +22,10 @@
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#startCamera">Use Scanner</button>
         </div>
     </div>
-    <div class="dropdown mb-3">   
+    <div class="dropdown mb-3">
         <button class="btn btn-dark dropdown-toggle" data-toggle="dropdown">
             Export Stock List
-        </button>                   
+        </button>
         <div class="dropdown-menu">
             <a class="dropdown-item pdf" href="{{ route('stock.export.list.pdf', ['filter' => 'weekly']) }}">PDF Weekly</a>
             <a class="dropdown-item pdf" href="{{ route('stock.export.list.pdf', ['filter' => 'monthly']) }}">PDF Monthly</a>
@@ -182,6 +182,7 @@
                                 @endphp
 
                                 @forelse ($availableForStockOut as $data)
+                                    @continue(!$data['item'])   {{-- Skip if the item was deleted --}}
                                     <option value="{{ $data['item']->id }}">
                                         {{ $data['item']->item_name }} — (Available: {{ $data['total_quantity'] }})
                                     </option>
@@ -511,12 +512,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // SAVE CHANGES BUTTON HANDLER
     document.getElementById('saveChangesBtn').addEventListener('click', function() {
-  
+
         const items = [];
 
         itemList.querySelectorAll('tr').forEach(row => {
             items.push({
-                item_id: row.dataset.itemId,   
+                item_id: row.dataset.itemId,
                 type: stockType.value,
                 qty: row.querySelector('.qty-input')?.value || 1,
                 date: row.querySelector('.date-input')?.value || '',
@@ -537,6 +538,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             success: function (response) {
                 alert("Stocks saved successfully!");
+                location.reload();
                 $('#item-list tbody').empty();
                 $('#startCamera').modal('hide');
             },
@@ -619,7 +621,7 @@ $(function () {
 
 .dropdown-menu .dropdown-item.pdf:hover,
 .dropdown-menu .dropdown-item.pdf:focus {
-    background-color: #dc3545 !important; 
+    background-color: #dc3545 !important;
     color: #fff !important;
 }
 
