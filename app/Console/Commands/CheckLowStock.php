@@ -45,7 +45,7 @@ class CheckLowStock extends Command
 
         foreach ($inventory as $record) {
             if ($record['total_quantity'] <= 10) {
-                Mail::to('user@example.com')->send(
+                Mail::to('renantebarcoma111@gmail.com')->send(
                     new LowStockAlert($record['item']->item_name, $record['total_quantity'])
                 );
 
