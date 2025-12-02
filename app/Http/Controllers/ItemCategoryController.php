@@ -30,7 +30,7 @@ class ItemCategoryController extends Controller
             'category_desc' => $validated['item_desc'],
         ]);
 
-        return redirect()->route('item_category.index');
+        return redirect()->route('item_category.index')->with('success', 'Category added successfully!');
     }
 
     public function update_category(Request $request, $id)
@@ -46,7 +46,7 @@ class ItemCategoryController extends Controller
         $itemCategory->category_desc = $validated['item_desc'];
         $itemCategory->update();
 
-        return redirect()->route('item_category.index');
+        return redirect()->route('item_category.index')->with('success', 'Category updated successfully!');
 
     }
 

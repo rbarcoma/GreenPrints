@@ -80,6 +80,8 @@ Route::middleware(['auth', 'checkStatus'])->group(function () {
         Route::delete('/item_category/{id}', 'destroy')->name('item_category.destroy');
     });
 
+    Route::post('/item/barcode/pdf', [ItemController::class, 'generateBarcodePDF'])->name('item.barcode.pdf');
+
 
     Route::controller(StockController::class)->middleware('auth')->group(function () {
 

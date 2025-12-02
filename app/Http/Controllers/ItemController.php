@@ -9,6 +9,8 @@ use App\Models\ItemModel;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Barryvdh\DomPDF\Facade\Pdf;
+use DNS1D; 
 
 
 class ItemController extends Controller
@@ -67,7 +69,7 @@ class ItemController extends Controller
         ]);
 
         // dd($validated);
-        return redirect()->route('item.index');
+        return redirect()->route('item.index')->with('success', 'Category added successfully!');
     }
 
 
@@ -91,6 +93,34 @@ class ItemController extends Controller
             'price' => $item->item_price,
         ]);
     }
+
+
+
+    public function generateBarcodePDF(Request $request)
+    {
+        $item = ItemModel::findOrFail($request->item_id);
+        $quantity = $request->quantity;
+
+        // Get barcode from database (NOT from request)
+        $barcode = $item->barcode->barcode_value;
+
+        $barcodes = [];
+
+        for ($i = 0; $i < $quantity; $i++) {
+            $barcodes[] = [
+                'name' => $item->item_name,
+                'barcode' => $barcode,
+                'barcode_html' => DNS1D::getBarcodeHTML($barcode, 'C128', 2, 60),
+            ];
+        }
+
+        $pdf = Pdf::loadView('process-automation.item.barcode_pdf', compact('barcodes'))
+            ->setPaper('A4', 'portrait');
+
+        return $pdf->download('barcode-print-' . $item->item_name . '.pdf');
+    }
+
+
 
     public function updateItem(Request $request, $id)
     {

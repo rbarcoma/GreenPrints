@@ -87,7 +87,7 @@ class StockController extends Controller
             'date'     => $request->input('date') ?? Carbon::now()->toDateString(),
         ]);
 
-        return redirect()->route('stock.index');
+        return redirect()->route('stock.index')->with('success', 'Stock added successfully!');
     }
 
     public function ScannerInsertion(Request $request)
@@ -134,7 +134,7 @@ class StockController extends Controller
             ]);
         }
 
-        return redirect()->route('stock.index');
+        return redirect()->route('stock.index')->with('success', 'Stock added successfully!');
     }
 
 

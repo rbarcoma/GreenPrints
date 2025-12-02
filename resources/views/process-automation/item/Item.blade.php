@@ -4,16 +4,40 @@
 
 @section('content_header')
     <h1>Item </h1>
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" class="text-light">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" class="text-light">&times;</span>
+            </button>
+        </div>
+    @endif
 @stop
 
 @section('content')
 <section class="border p-3 card">
 
+    
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h4 class="mb-0">Item List</h4>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createModal">
-            Create Item
-        </button>
+        <div>
+            <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#createModal">
+                Create Item
+            </button>
+            <button type="button" class="btn btn-dark" id="openPrintBarcodeModal">
+                Print Barcode
+            </button>
+        </div>
     </div>
 
     <!-- Create Modal -->
@@ -300,6 +324,60 @@
         </table>
     </div>
 
+    <!-- BARCODE PRINT MODAL -->
+<!-- BARCODE PRINT MODAL -->
+<div class="modal fade" id="barcodePrintModal" tabindex="-1">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header text-black">
+                <h5 class="modal-title">Print Item Barcode</h5>
+                <button class="close" data-dismiss="modal"><span>&times;</span></button>
+            </div>
+
+            <form action="{{ route('item.barcode.pdf') }}" method="POST" target="_blank">
+                @csrf
+
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>Select Item</label>
+                        <select name="item_id" id="bp_item_id" class="form-control" required>
+                            <option value="" disabled selected>Select Item</option>
+                            @foreach ($item_collection as $item)
+                                <option value="{{ $item->id }}"
+                                        data-barcode="{{ $item->barcode->barcode_value }}"
+                                        data-name="{{ $item->item_name }}">
+                                    {{ $item->item_name }} ({{ $item->barcode->barcode_value }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quantity to Print</label>
+                        <input type="number" min="1" value="1" name="quantity" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Barcode Preview</label>
+                        <div id="bp_preview" class="text-center"></div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Generate PDF</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
 </section>
 @stop
 
@@ -327,6 +405,26 @@
     imageInput.value = '';       // clear file input
     removeBtn.classList.add('d-none'); // hide button
   }
+</script>
+
+<script>
+// OPEN MODAL WHEN CLICKING TOP BUTTON
+$("#openPrintBarcodeModal").on("click", function() {
+    $('#barcodePrintModal').modal('show');
+});
+
+// WHEN SELECTING ITEM — UPDATE BARCODE PREVIEW
+$("#bp_item_id").on("change", function () {
+    let barcode = $(this).find(':selected').data("barcode");
+
+    if (barcode) {
+        $('#bp_preview').html(`
+            {!! DNS1D::getBarcodeHTML('TEMP_BARCODE', 'C128', 2, 50) !!}
+            <div class="mt-2">${barcode}</div>
+        `.replace('TEMP_BARCODE', barcode));
+    }
+});
+
 </script>
 
 <script>

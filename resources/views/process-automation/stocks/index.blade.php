@@ -4,9 +4,27 @@
 
 @section('content_header')
     <h1>Stocks Record</h1>
+    
 @stop
 
 @section('content')
+@if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" class="text-light">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" class="text-light">&times;</span>
+            </button>
+        </div>
+    @endif
 <section class="border p-3 card">
 
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -605,6 +623,17 @@ $(function () {
 });
 
 </script>
+
+<script>
+    $(document).ready(function () {
+        $('select[name="product_id"]').select2({
+            placeholder: "Search product...",
+            width: '100%'
+        });
+    });
+</script>
+
+
 @stop
 
 @section('css')
@@ -630,6 +659,20 @@ $(function () {
     background-color: #198754 !important;
     color: #fff !important;
 }
+</style>
+
+<style>
+    /* Upgraded look ng Select2 */
+    .select2-container--default .select2-selection--single {
+        height: 38px;
+        padding: 5px 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+    .select2-container--default .select2-selection__arrow {
+        height: 36px;
+        right: 8px;
+    }
 </style>
 
 @endsection
