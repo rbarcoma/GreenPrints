@@ -9,14 +9,21 @@
 @section('content')
     <p>Welcome to this beautiful admin panel.</p>
 
-    @if($errors->any())
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" class="text-light">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if(session('error'))
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            @foreach ($errors->all() as $error)
-                {{ $error }} <br>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true" class="text-light">&times;</span>
-                </button>
-            @endforeach
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true" class="text-light">&times;</span>
+            </button>
         </div>
     @endif
 
@@ -36,30 +43,12 @@
             </div>
         @endif --}}
 
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true" class="text-light">&times;</span>
-            </button>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            {{ session('error') }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true" class="text-light">&times;</span>
-            </button>
-        </div>
-    @endif
-
     <section class="border p-3 card">
 
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0">Menu Header List</h4>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                 Create Menu Header
             </button>
         </div>
@@ -70,7 +59,7 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Menu Header creation</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('menu-header.create') }}" method="POST">
@@ -95,7 +84,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-success">Add Menu Header</button>
                 </div>
                   </form>
@@ -126,7 +115,7 @@
                         </td>
                         <td>
                             <div class="d-flex">
-                                <button type="button" class="btn btn-sm btn-primary mr-2" data-bs-toggle="modal" data-bs-target="#exampleModal{{ $headers->id }}">
+                                <button type="button" class="btn btn-sm btn-primary mr-2" data-toggle="modal" data-target="#exampleModal{{ $headers->id }}">
                                     Edit
                                 </button>
                                 <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteHeader{{ $headers->id }}">
@@ -142,7 +131,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Menu Header: {{ $headers->name }} </h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <form action="{{ route('menu-header.update', $headers->id) }}" method="POST">
@@ -170,7 +159,7 @@
                                             @endforeach
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                             <button type="submit" class="btn btn-success">Save changes</button>
                                         </div>
                                     </form>
@@ -228,26 +217,27 @@
     </strong>
 @stop --}}
 
-
-@section('css')
- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap5.min.css') }}">
-@stop
-
 @section('js')
-    <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
+    {{-- <script src="{{ asset('js/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/dataTables.bootstrap5.min.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script> --}}
 
     {{-- Initialize DataTable --}}
     <script>
-        $(document).ready(function() {
-            $('#example').DataTable();
+      $(function () {
+        $('#example').DataTable({
+            responsive: true,
+            autoWidth: true,
+            pageLength: 10,
+            language: {
+                search: "Search:",
+                lengthMenu: "Show _MENU_ entries",
+            }
         });
+    });
     </script>
 
-    <script>console.log("✅ DataTables is now working with AdminLTE!");</script>
 @stop

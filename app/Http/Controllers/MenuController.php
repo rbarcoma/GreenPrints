@@ -40,7 +40,7 @@ class MenuController extends Controller
             'route'     => $request->route,
         ]);
 
-        return redirect()->route('menu');
+        return redirect()->route('menu')->with('success', 'User added successfully!');
     }
 
     public function updateMenu($id, Request $request)
@@ -64,7 +64,7 @@ class MenuController extends Controller
             'route'     => $validated['route'],
         ]);
 
-        return redirect()->route('menu');
+        return redirect()->route('menu')->with('success', 'User updated successfully!');
     }
 
     public function MenuDelete(Request $request, $id)
@@ -114,7 +114,7 @@ class MenuController extends Controller
             'name' => strtoupper($validated['name']),
             'menu_ids' => $validated['menus'] ?? [],
         ]);
-        return redirect()->route('menu-header');
+        return redirect()->route('menu-header')->with('success', 'Menu Header added successfully!');
     }
 
     public function menuHeaderUpdate($id, Request $request)

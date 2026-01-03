@@ -4,7 +4,7 @@
 
 @section('content_header')
     <h1>Stocks Record</h1>
-    
+
 @stop
 
 @section('content')
@@ -300,7 +300,7 @@
                         <td>{{ $in->quantity }}</td>
                         <td>{{ $in->remarks }}</td>
                         <td>{{ \Carbon\Carbon::parse($in->date)->format('M d, Y') }}</td>
-                        <td>{{ $in->user->name }}</td>
+                        <td>{{ $in->user->name ?? 'N/A' }}</td>
                      </tr>
                  @endforeach
                 </tbody>
@@ -347,7 +347,7 @@
                         <td>{{ $out->quantity }}</td>
                         <td>{{ $out->remarks }}</td>
                         <td>{{ \Carbon\Carbon::parse($out->date)->format('M d, Y') }}</td>
-                        <td>{{ $out->user->name }}</td>
+                        <td>{{ $in->user->name ?? 'N/A' }}</td>
                      </tr>
                  @endforeach
                 </tbody>

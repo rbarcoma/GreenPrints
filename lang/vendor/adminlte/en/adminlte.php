@@ -6,7 +6,7 @@ return [
     'email' => 'Email',
     'password' => 'Password',
     'retype_password' => 'Retype password',
-    'remember_me' => 'Remember Me',
+    'remember_me' => '',
     'register' => 'Register',
     'register_a_new_membership' => 'Register a new membership',
     'i_forgot_my_password' => 'I forgot my password',

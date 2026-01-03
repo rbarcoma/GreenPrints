@@ -45,7 +45,7 @@
                 <td style="text-align:center;">{{ $out->quantity }}</td>
                 <td>{{ $out->remarks }}</td>
                 <td>{{ \Carbon\Carbon::parse($out->date)->format('M d, Y') }}</td>
-                <td>{{ $out->user->name }}</td>
+                <td>{{ $in->user->name ?? 'N/A' }}</td>
             </tr>
             @endforeach
         </tbody>

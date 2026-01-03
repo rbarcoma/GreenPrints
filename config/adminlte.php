@@ -271,9 +271,11 @@ return [
     // 'register_url' => 'register',
     // 'password_reset_url' => 'password/reset',
     // 'password_email_url' => 'password/email',
+    'remember_me' => false,
     'register_url' => false,
-    'password_reset_url' => false,
-    'password_email_url' => false,
+
+    'password_reset_url' => true,
+    'password_email_url' => true,
     'profile_url' => false,
     'disable_darkmode_routes' => false,
 
