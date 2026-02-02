@@ -1,0 +1,2 @@
+[phases.setup]
+php_version = "8.2"
