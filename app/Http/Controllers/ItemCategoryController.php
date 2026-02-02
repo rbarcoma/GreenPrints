@@ -27,7 +27,7 @@ class ItemCategoryController extends Controller
 
         $item = ItemCategoryModel::firstOrCreate([
             'category_name' => $validated['name'],
-            'category_desc' => $validated['item_desc'],
+            'item_desc' => $validated['item_desc'],
         ]);
 
         return redirect()->route('item_category.index')->with('success', 'Category added successfully!');
@@ -43,7 +43,7 @@ class ItemCategoryController extends Controller
         $itemCategory = ItemCategoryModel::findOrFail($id);
 
         $itemCategory->category_name = $validated['name'];
-        $itemCategory->category_desc = $validated['item_desc'];
+        $itemCategory->item_desc = $validated['item_desc'];
         $itemCategory->update();
 
         return redirect()->route('item_category.index')->with('success', 'Category updated successfully!');

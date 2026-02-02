@@ -11,6 +11,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ItemInventoryController;
 use App\Http\Controllers\ChangePasswordController;
+use App\Http\Controllers\Auth\OtpResetController;
 use Illuminate\Support\Facades\Redirect;
 
 /*
@@ -28,6 +29,13 @@ Route::get('/', function () {
     // return view('welcome');
     return Redirect::to('/login');
 });
+
+Route::get('/password/reset', [OtpResetController::class, 'showEmailForm'])->name('password.request');
+Route::post('/password/send-otp', [OtpResetController::class, 'sendOtp'])->name('password.sendOtp');
+
+Route::get('/password/confirm', [OtpResetController::class, 'showConfirmForm'])->name('password.confirm');
+Route::post('/password/confirm', [OtpResetController::class, 'confirmReset'])->name('password.confirm.post');
+
 
 Auth::routes();
 
@@ -48,7 +56,6 @@ Route::middleware(['auth', 'checkStatus'])->group(function () {
     });
 
     Route::controller(UserController::class)->group(function () {
-
         Route::get('/user', 'userIndex')->name('menu.user');
         Route::post('/user', 'userCreate')->name('menu.user-create');
         Route::put('/user/update/{id}', 'userUpdate')->name('menu.user-update');
@@ -58,7 +65,6 @@ Route::middleware(['auth', 'checkStatus'])->group(function () {
     });
 
     Route::controller(RoleController::class)->middleware('auth')->group(function () {
-
         Route::get('/role', 'roleIndex')->name('menu.role');
         Route::post('/role', 'roleCreation')->name('menu.role-creation');
         Route::put('/role/{id}', 'updateRole')->name('menu.role-update');
@@ -101,5 +107,7 @@ Route::middleware(['auth', 'checkStatus'])->group(function () {
         Route::get('/stock/export/out/excel', 'exportStockOutExcel')->name('stock.export.out.excel');
 
     });
+
+
 
 });

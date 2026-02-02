@@ -113,32 +113,33 @@
         {{-- <pre>
         {{ print_r($stockIn, true) }}
         </pre> --}}
+    <div class="row">
 
-    <div class="d-flex">
-        <div class="container ">
-            <div class="card card-primary">
-                <div class="card-header">
-                    <h3 class="card-title">Stock Overview</h3>
-                </div>
-                <div class="card-body">
-                    <canvas id="stockChart" style="height:250px; min-height:250px"></canvas>
-                </div>
+    {{-- Chart 1: Stock Overview --}}
+    <div class="col-12 col-lg-6 mb-4">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Stock Overview</h3>
             </div>
-        </div>
-
-
-        <div class="container ">
-            <div class="card card-primary">
-                <div class="card-header">
-                    <h3 class="card-title">Stock In vs Stock Out (per date)</h3>
-                </div>
-                <div class="card-body">
-                    <canvas id="dailyStockChart" style="height:250px; min-height:250px"></canvas>
-                </div>
+            <div class="card-body">
+                <canvas id="stockChart" style="height:300px;"></canvas>
             </div>
         </div>
     </div>
 
+    {{-- Chart 2: Daily Stock --}}
+    <div class="col-12 col-lg-6 mb-4">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Stock In vs Stock Out (per date)</h3>
+            </div>
+            <div class="card-body">
+                <canvas id="dailyStockChart" style="height:300px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
 
 @stop
 @section('css')

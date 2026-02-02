@@ -45,13 +45,7 @@
             Export Stock List
         </button>
         <div class="dropdown-menu">
-            <a class="dropdown-item pdf" href="{{ route('stock.export.list.pdf', ['filter' => 'weekly']) }}">PDF Weekly</a>
-            <a class="dropdown-item pdf" href="{{ route('stock.export.list.pdf', ['filter' => 'monthly']) }}">PDF Monthly</a>
-            <a class="dropdown-item pdf" href="{{ route('stock.export.list.pdf', ['filter' => 'yearly']) }}">PDF Yearly</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item excel" href="{{ route('stock.export.list.excel', ['filter' => 'weekly']) }}">Excel Weekly</a>
-            <a class="dropdown-item excel" href="{{ route('stock.export.list.excel', ['filter' => 'monthly']) }}">Excel Monthly</a>
-            <a class="dropdown-item excel" href="{{ route('stock.export.list.excel', ['filter' => 'yearly']) }}">Excel Yearly</a>
+            <a class="dropdown-item pdf" href="{{ route('stock.export.list.pdf', ['filter' => 'weekly']) }}">Stock List Generate</a>
         </div>
     </div>
 

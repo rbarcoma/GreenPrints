@@ -4,7 +4,7 @@
             <td colspan="6" style="text-align:center; border:1px solid #000;">GreenPrints</td>
         </tr>
         <tr>
-            <td colspan="6" style="text-align:center; border:1px solid #000;">Stock List Report</td>
+            <td colspan="6" style="text-align:center; border:1px solid #000;">Stock Out Report</td>
         </tr>
         <tr style="background: #d9ead3; font-weight: bold;">
             <th style="border:1px solid #000;">ID</th>

@@ -36,7 +36,7 @@
 
     <!-- Create Modal -->
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-md modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="createModalLabel">Item Category Creation</h5>
@@ -85,7 +85,7 @@
                     <tr>
                         <td>{{ $category->id }}</td>
                         <td>{{ $category->category_name }}</td>
-                        <td>{{ $category->category_desc}}</td>
+                        <td>{{ $category->item_desc}}</td>
                         <td>
                             <div class="d-flex">
                                 <button class="btn btn-sm btn-primary me-1 mr-2" data-toggle="modal" data-target="#editModal{{ $category->id }}">Edit</button>
@@ -119,7 +119,7 @@
                                         </div>
                                          <div class="mb-3">
                                             <label for="formGroupExampleInput" class="form-label">Description</label>
-                                            <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="item_desc"  >{{ $category->category_desc }}</textarea>
+                                            <textarea class="form-control" placeholder="Leave a description here" id="floatingTextarea" name="item_desc"  >{{ $category->item_desc }}</textarea>
                                              @error('item_desc')
                                                 <div class="text-danger">{{ $message }}</div>
                                             @enderror

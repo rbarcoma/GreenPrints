@@ -40,12 +40,12 @@
         <tbody>
             @foreach ($records as $out)
             <tr>
-                <td>{{ $out->id }}</td>
-                <td>{{ $out->item->item_name }}</td>
+                <td style="text-align:center;">{{ $out->id }}</td>
+                <td style="text-align:center;">{{ $out->item->item_name }}</td>
                 <td style="text-align:center;">{{ $out->quantity }}</td>
-                <td>{{ $out->remarks }}</td>
-                <td>{{ \Carbon\Carbon::parse($out->date)->format('M d, Y') }}</td>
-                <td>{{ $in->user->name ?? 'N/A' }}</td>
+                <td style="text-align:center;">{{ $out->remarks }}</td>
+                <td style="text-align:center;">{{ \Carbon\Carbon::parse($out->date)->format('M d, Y') }}</td>
+                <td style="text-align:center;">{{ $out->user->name ?? 'N/A' }}</td>
             </tr>
             @endforeach
         </tbody>

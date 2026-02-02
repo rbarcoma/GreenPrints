@@ -164,6 +164,7 @@ class StockController extends Controller
             return [
                 'item' => $group->first()->item,
                 'total_quantity' => $total,
+                'date' => $group->sortByDesc('date')->first()->date,
             ];
         });
 
